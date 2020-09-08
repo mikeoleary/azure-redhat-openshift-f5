@@ -1,0 +1,57 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminUserName": {
+            "metadata": {
+                "description": "User Name for network devices"
+            },
+            "type": "string"
+        },
+        "password": {
+            "metadata": {
+                "description": "Password or SSH public key to login to the Virtual Machine. Note: There are a number of special characters that you should avoid using for F5 product user accounts.  See [K2873](https://support.f5.com/csp/article/K2873) for details. Note: If using key-based authentication, this should be the public key as a string, typically starting with **---- BEGIN SSH2 PUBLIC KEY ----** and ending with **---- END SSH2 PUBLIC KEY ----**."
+            },
+            "type": "securestring"
+        },
+        "dnsLabel": {
+            "metadata": {
+                "description": "Must be globally unique DNS Name. This value is used to name resources like VMs and storage accounts. Must be letters and numbers only."
+            },
+            "type": "string"
+        },
+        "restrictedSrcAddress": {
+            "metadata": {
+                "description": "This field restricts management access to a specific network or address. Enter an IP address or address range in CIDR notation. You should use your own IP address. By using * you will leave this management console open to the Internet, which is not recommended."
+            },
+            "defaultValue": "*",
+            "type": "string"
+        }
+    },
+    "variables": {
+        "vnetTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/master/templates/vnet.json",
+        "resourceGroupName": "[resourceGroup().name]",
+        "location": "[resourceGroup().location]",
+        "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]"
+
+    },
+    "resources": [
+                    {
+                        "type": "Microsoft.Resources/deployments",
+                        "apiVersion": "2018-05-01",
+                        "name": "vnetLinkedTemplate",
+                        "properties": {
+                            "mode": "Incremental",
+                            "templateLink": {
+                                "uri": "[variables('vnetTemplateUri')]",
+                                "contentVersion":"1.0.0.0"
+                            },
+                            "parameters": {
+                                "vnetName": {
+                                    "value": "[variables('vnetName')]"
+                                }
+                            }
+                        }
+                    }
+                ]
+}
