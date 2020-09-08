@@ -25,7 +25,7 @@
       },
       "subnet1Name": {
         "type": "string",
-        "defaultValue": "Subnet1",
+        "defaultValue": "Mgmt",
         "metadata": {
           "description": "Subnet 1 Name"
         }
@@ -39,7 +39,7 @@
       },
       "subnet2Name": {
         "type": "string",
-        "defaultValue": "Subnet2",
+        "defaultValue": "External",
         "metadata": {
           "description": "Subnet 2 Name"
         }
@@ -53,7 +53,7 @@
       },
       "subnet3Name": {
         "type": "string",
-        "defaultValue": "Subnet3",
+        "defaultValue": "Internal",
         "metadata": {
           "description": "Subnet 3 Name"
         }
@@ -67,7 +67,7 @@
       },
       "subnet4Name": {
         "type": "string",
-        "defaultValue": "Subnet4",
+        "defaultValue": "MasterSubnet",
         "metadata": {
           "description": "Subnet 4 Name"
         }
@@ -81,7 +81,7 @@
       },
       "subnet5Name": {
         "type": "string",
-        "defaultValue": "Subnet5",
+        "defaultValue": "WorkerSubnet",
         "metadata": {
           "description": "Subnet 5 Name"
         }
