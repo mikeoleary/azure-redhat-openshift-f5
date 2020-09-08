@@ -157,7 +157,13 @@
               "[parameters('subnet3Name')]"
             ],
             "properties": {
-              "addressPrefix": "[parameters('subnet4Prefix')]"
+              "addressPrefix": "[parameters('subnet4Prefix')]",
+              "privateLinkServiceNetworkPolicies": "Disabled",
+              "serviceEndpoints": [
+                {
+                  "service": "Microsoft.ContainerRegistry"
+                }
+              ]
             }
           },
           {
@@ -170,7 +176,13 @@
               "[parameters('subnet4Name')]"
             ],
             "properties": {
-              "addressPrefix": "[parameters('subnet5Prefix')]"
+              "addressPrefix": "[parameters('subnet5Prefix')]",
+              "privateLinkServiceNetworkPolicies": "Disabled",
+              "serviceEndpoints": [
+                {
+                  "service": "Microsoft.ContainerRegistry"
+                }
+              ]
             }
           }
         ]
