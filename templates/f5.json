@@ -1369,11 +1369,11 @@
         },
         "privateSelfIpAddress0":{
             "type": "string",
-            "value": "[reference(concat(variables('intNicName'), '0')).IpConfigurations[0].PrivateIPAddress]"
+            "value": "[reference(concat(variables('intNicName'), '0')).IpConfigurations[0].properties.privateIPAddress]"
         },
         "privateSelfIpAddress1":{
             "type": "string",
-            "value": "[reference(concat(variables('intNicName'), '1')).IpConfigurations[0].PrivateIPAddress]"
+            "value": "[reference(concat(variables('intNicName'), '1')).IpConfigurations[0].properties.privateIPAddress]"
         }
     }
 }
