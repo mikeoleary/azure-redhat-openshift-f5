@@ -29,8 +29,8 @@
         }
     },
     "variables": {
-        "vnetTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/master/templates/vnet.json",
-        "f5TemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/master/templates/f5.json",
+        "vnetTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/vnet.json",
+        "f5TemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/f5.json",
         "resourceGroupName": "[resourceGroup().name]",
         "location": "[resourceGroup().location]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
