@@ -45,8 +45,3 @@ curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASS
 #set allowed services on selfIP of Internal VLAN to be default + tcp:4789
 curl -s -k -X PATCH -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_IP/mgmt/tm/net/self/self_3nic -d '{"allowService": ["default","tcp:4789"]}'
 
-
-# to delete BIGIP config of tunnel, profile, and tunnel self IP
-#curl -s -k -X DELETE -H "Content-Type: application/json" -u admin:MMonday123 https://52.191.22.217/mgmt/tm/net/self/tunnelSelfIP
-#curl -s -k -X DELETE -H "Content-Type: application/json" -u admin:MMonday123 https://52.191.22.217/mgmt/tm/net/tunnels/tunnel/openshift_vxlan 
-#curl -s -k -X DELETE -H "Content-Type: application/json" -u admin:MMonday123 https://52.191.22.217/mgmt/tm/net/tunnels/vxlan/vxlan-mp
