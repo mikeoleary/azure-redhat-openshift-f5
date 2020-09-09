@@ -4,19 +4,24 @@
   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmikeoleary%2Fazure-redhat-openshift-f5%2Fmain%2Fdeploy.json)
 
 ## Instructions
-
-Set Variables:
+These instructions are intended to be run from a Linux workstation with [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed. For the official instructions from Microsoft on deploying ARO, you can view [this tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster).
+1. Obtain a [pull secret from RedHat](https://www.openshift.com/try) and save it as pull-secret.txt
+2. Register the provider in your Azure subscription. This only needs to be done once.
+````
+az provider register -n Microsoft.RedHatOpenShift --wait 
+````
+3. Set Variables:
 ````
 CLUSTER=ocpcluster
-RESOURCEGROUP=moleary-aro
+RESOURCEGROUP=aro-demo
 LOCATION=eastus2
 VNET=($RESOURCEGROUP'-vnet')
 PRIMARYSUBNET=PrimarySubnet
 WORKERSUBNET=WorkerSubnet
 ````
-Now run this command:
+4. Run this command from the directory where the pull secret was saved:
 ````
-  az aro create --resource-group $RESOURCEGROUP --name $CLUSTER --vnet $VNET --master-subnet $PRIMARYSUBNET --worker-subnet $WORKERSUBNET
+  az aro create --resource-group $RESOURCEGROUP --name $CLUSTER --vnet $VNET --master-subnet $PRIMARYSUBNET --worker-subnet $WORKERSUBNET --pull-secret @pull-secret.txt
 ````
 
 ## Pledge for Racial Equality, Diversity, and Inclusion
