@@ -52,6 +52,32 @@
                                 }
                             }
                         }
+                    },
+                                        {
+                        "type": "Microsoft.Resources/deployments",
+                        "apiVersion": "2018-05-01",
+                        "name": "f5LinkedTemplate",
+                        "properties": {
+                            "mode": "Incremental",
+                            "templateLink": {
+                                "uri": "[variables('vnetTemplateUri')]",
+                                "contentVersion":"8.1.1.0"
+                            },
+                            "parameters": {
+                                "vnetName": {
+                                    "value": "[variables('vnetName')]"
+                                },
+                                "adminUsername":{
+                                    "value": "[parameters('adminUserName')]"
+                                },
+                                "adminPasswordOrKey":{
+                                    "value": "[parameters('password')]"
+                                },
+                                "dnsLabel":{
+                                    "value": "[parameters('dnsLabel')]"
+                                }
+                            }
+                        }
                     }
                 ]
 }
