@@ -30,10 +30,15 @@
     },
     "variables": {
         "vnetTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/master/templates/vnet.json",
+        "f5TemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/master/templates/f5.json",
         "resourceGroupName": "[resourceGroup().name]",
         "location": "[resourceGroup().location]",
-        "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]"
-
+        "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
+        "subnet1Name": "Mgmt",
+        "subnet2Name": "External",
+        "subnet3Name": "Internal",
+        "subnet4Name": "MasterSubnet",
+        "subnet5Name": "WorkerSubnet"
     },
     "resources": [
                     {
@@ -49,24 +54,39 @@
                             "parameters": {
                                 "vnetName": {
                                     "value": "[variables('vnetName')]"
+                                },
+                                "subnet1Name": {
+                                    "value": "[variables('subnet1Name')]"
+                                },
+                                "subnet2Name": {
+                                    "value": "[variables('subnet2Name')]"
+                                },
+                                "subnet3Name": {
+                                    "value": "[variables('subnet3Name')]"
+                                },
+                                "subnet4Name": {
+                                    "value": "[variables('subnet4Name')]"
+                                },
+                                "subnet5Name": {
+                                    "value": "[variables('subnet5Name')]"
                                 }
                             }
                         }
                     },
-                                        {
+                    {
                         "type": "Microsoft.Resources/deployments",
                         "apiVersion": "2018-05-01",
                         "name": "f5LinkedTemplate",
+                        "dependsOn": [
+                            "vnetLinkedTemplate"
+                        ],
                         "properties": {
                             "mode": "Incremental",
                             "templateLink": {
-                                "uri": "[variables('vnetTemplateUri')]",
+                                "uri": "[variables('f5TemplateUri')]",
                                 "contentVersion":"8.1.1.0"
                             },
                             "parameters": {
-                                "vnetName": {
-                                    "value": "[variables('vnetName')]"
-                                },
                                 "adminUsername":{
                                     "value": "[parameters('adminUserName')]"
                                 },
@@ -75,6 +95,30 @@
                                 },
                                 "dnsLabel":{
                                     "value": "[parameters('dnsLabel')]"
+                                },
+                                "provisionInternalLoadBalancer": {
+                                    "value": "No"
+                                },
+                                "bigIpModules":{
+                                    "value": "ltm:nominal,asm:nominal"
+                                },
+                                "vnetName": {
+                                    "value": "[variables('vnetName')]"
+                                },
+                                "vnetResourceGroupName":{
+                                    "value": "[variables('resourceGroupName')]"
+                                },
+                                "mgmtSubnetName":{
+                                    "value": "[variables('subnet1Name')]"
+                                },
+                                "externalSubnetName":{
+                                    "value": "[variables('subnet2Name')]"
+                                },
+                                "internalSubnetName":{
+                                    "value": "[variables('subnet3Name')]"
+                                },
+                                "restrictedSrcAddress": {
+                                    "value": "[parameters('restrictedSrcAddress')]"
                                 }
                             }
                         }

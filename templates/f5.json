@@ -1366,6 +1366,14 @@
         "SSH-URL": {
             "type": "string",
             "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat(reference(concat(variables('mgmtNicId'), '0')).ipConfigurations[0].properties.privateIPAddress,' ',22), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
+        },
+        "privateSelfIpAddress0":{
+            "type": "string",
+            "value": "[reference(concat(variables('intNicName'), '0')).ipAddress]"
+        },
+        "privateSelfIpAddress1":{
+            "type": "string",
+            "value": "[reference(concat(variables('intNicName'), '1')).ipAddress]"
         }
     }
 }
