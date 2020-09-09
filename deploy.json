@@ -37,7 +37,7 @@
         "subnet1Name": "Mgmt",
         "subnet2Name": "External",
         "subnet3Name": "Internal",
-        "subnet4Name": "MasterSubnet",
+        "subnet4Name": "PrimarySubnet",
         "subnet5Name": "WorkerSubnet"
     },
     "resources": [

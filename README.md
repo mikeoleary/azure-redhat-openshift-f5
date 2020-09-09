@@ -11,10 +11,10 @@ CLUSTER=ocpcluster
 RESOURCEGROUP=moleary-aro
 LOCATION=eastus2
 VNET=($RESOURCEGROUP'-vnet')
-MASTERSUBNET=MasterSubnet
+PRIMARYSUBNET=PrimarySubnet
 WORKERSUBNET=WorkerSubnet
 ````
 Now run this command:
 ````
-  az aro create --resource-group $RESOURCEGROUP --name $CLUSTER --vnet $VNET --master-subnet $MASTERSUBNET --worker-subnet $WORKERSUBNET
+  az aro create --resource-group $RESOURCEGROUP --name $CLUSTER --vnet $VNET --master-subnet $PRIMARYSUBNET --worker-subnet $WORKERSUBNET
 ````

@@ -67,7 +67,7 @@
       },
       "subnet4Name": {
         "type": "string",
-        "defaultValue": "MasterSubnet",
+        "defaultValue": "PrimarySubnet",
         "metadata": {
           "description": "Subnet 4 Name"
         }
