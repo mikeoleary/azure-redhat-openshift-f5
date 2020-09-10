@@ -75,7 +75,8 @@
         "subnet3Name": "Internal",
         "subnet4Name": "PrimarySubnet",
         "subnet5Name": "WorkerSubnet",
-        "uniqueStringForDnsZone": "[uniqueString( resourceGroup().id, subscription().id )]",
+        "uniqueString": "[uniqueString( resourceGroup().id, subscription().id )]",
+        "uniqueStringForDnsZone": "[substring(variables('uniqueString'), 0, 8)]",
         "domain": "[if(equals(parameters('domain'), 'GENERATE_UNIQUE_DOMAIN_NAME'), variables('uniqueStringForDnsZone'), parameters('domain'))]",
         "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueStringForDnsZone'))]"
     },
