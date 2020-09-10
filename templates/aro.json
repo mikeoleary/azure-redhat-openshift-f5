@@ -1,0 +1,110 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "openShiftClusterName": {
+            "defaultValue": "ocpcluster",
+            "type": "String"
+        },
+
+        "vnetName": {
+            "type": "String"
+        },
+        "vnetResourceGroupName": {
+            "type": "String"
+        },
+        "primarySubnetName": {
+            "defaultValue": "PrimarySubnet",
+            "type": "String"
+        },
+        "workerSubnetName": {
+            "defaultValue": "WorkerSubnet",
+            "type": "String"
+        },
+        "domain": {
+            "type": "string",
+            "metadata": {
+                "description": "DNS domain of your cluster. Must be globally unique and resolvable in DNS."
+            }
+        },
+        "version": {
+            "type": "string",
+            "defaultValue": "4.4.17",
+            "metadata": {
+                "description": "OpenShift cluster version"
+            }
+        },
+        "readOnlyResourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "This will be a resourceGroup that is ReadOnly and contains cluster resources"
+            }
+        },
+        "servicePrincipalclientId": {
+            "type": "string",
+            "metadata":{
+                "description": "Service Principal with contributor rights on subscription"
+            }
+        },
+        "servicePrincipalclientSecret": {
+            "type": "securestring",
+            "metadata":{
+                "description": "Service Principal secret"
+            }
+        }
+    },
+    "variables": {
+        "vnetId": "[concat(subscription().id, '/resourceGroups/', parameters('vnetResourceGroupName'), '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'))]",
+        "primarySubnetId": "[concat(variables('vnetId'), '/subnets/', parameters('primarySubnetName'))]",
+        "workerSubnetId": "[concat(variables('vnetId'), '/subnets/', parameters('workerSubnetName'))]",
+        "readOnlyResourceGroupId": "[concat(subscription().id, '/resourceGroups/', parameters('readOnlyResourceGroupName'))]",
+        "location": "[resourceGroup().location]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.RedHatOpenShift/openShiftClusters",
+            "apiVersion": "2020-04-30",
+            "name": "[parameters('openShiftClusterName')]",
+            "location": "[variables('location')]",
+            "properties": {
+                "provisioningState": "Creating",
+                "clusterProfile": {
+                    "domain": "[parameters('domain')]",
+                    "version": "[parameters('version')]",
+                    "resourceGroupId": "[variables('readOnlyResourceGroupId')]"
+                },
+                "consoleProfile": {},
+                "servicePrincipalProfile": {
+                    "clientId": "[parameters('servicePrincipalclientId')]",
+                    "clientSecret": "[parameters('servicePrincipalclientSecret')]"
+                },
+                "networkProfile": {
+                    "podCidr": "10.128.0.0/14",
+                    "serviceCidr": "172.30.0.0/16"
+                },
+                "masterProfile": {
+                    "vmSize": "Standard_D8s_v3",
+                    "subnetId": "[variables('primarySubnetId')]"
+                },
+                "workerProfiles": [
+                    {
+                        "name": "worker",
+                        "vmSize": "Standard_D4s_v3",
+                        "diskSizeGB": 128,
+                        "subnetId": "[variables('workerSubnetId')]",
+                        "count": 3
+                    }
+                ],
+                "apiserverProfile": {
+                    "visibility": "Public"
+                },
+                "ingressProfiles": [
+                    {
+                        "name": "default",
+                        "visibility": "Public"
+                    }
+                ]
+            }
+        }
+    ]
+}

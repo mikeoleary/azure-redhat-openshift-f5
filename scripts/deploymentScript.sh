@@ -47,3 +47,8 @@ curl -s -k -X POST -H "Content-Type: application/json" -u $BIGIP_MGMT_USERNAME:$
 #set allowed services on selfIP of Internal VLAN to be default + tcp:4789
 curl -s -k -X PATCH -H "Content-Type: application/json" -u $BIGIP_MGMT_USERNAME:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_IP/mgmt/tm/net/self/self_3nic -d '{"allowService": ["default","tcp:4789"]}'
 
+##Deploy F5 CIS
+rm -r cis
+mkdir cis
+wget https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/cis/secret.yaml
+

@@ -26,19 +26,46 @@
             },
             "defaultValue": "*",
             "type": "string"
+        },
+        "openShiftClusterName": {
+            "metadata": {
+                "description": "Name of OpenShift cluster."
+            },
+            "defaultValue": "*",
+            "type": "string"
+        },
+        "domain": {
+            "metadata": {
+                "description": "DNS domain of your cluster. Must be globally unique and resolvable in DNS. Leave as default value if you do not have your own DNS domain name."
+            },
+            "defaultValue": "GENERATE_UNIQUE_DOMAIN_NAME",
+            "type": "string"
+        },
+        "openShiftVersion":{
+            "type": "string",
+            "defaultValue": "4.4.17",
+            "allowedValues": [
+                "4.4.17"
+            ],
+            "metadata": {
+                "description": "OpenShift Cluster Version"
+            }
         }
     },
     "variables": {
         "vnetTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/vnet.json",
         "f5TemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/f5.json",
+        "aroTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/aro.json",
         "resourceGroupName": "[resourceGroup().name]",
-        "location": "[resourceGroup().location]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
         "subnet1Name": "Mgmt",
         "subnet2Name": "External",
         "subnet3Name": "Internal",
         "subnet4Name": "PrimarySubnet",
-        "subnet5Name": "WorkerSubnet"
+        "subnet5Name": "WorkerSubnet",
+        "uniqueStringForDnsZone": "[uniqueString( resourceGroup().id, subscription().name )]",
+        "domain": "[if(equals(parameters('domain'), 'GENERATE_UNIQUE_DOMAIN_NAME'), parameters('domain'), variables('uniqueStringForDnsZone'))]",
+        "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueStringForDnsZone'))]"
     },
     "resources": [
                     {
@@ -119,6 +146,44 @@
                                 },
                                 "restrictedSrcAddress": {
                                     "value": "[parameters('restrictedSrcAddress')]"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "type": "Microsoft.Resources/deployments",
+                        "apiVersion": "2018-05-01",
+                        "name": "aroLinkedTemplate",
+                        "properties": {
+                            "mode": "Incremental",
+                            "templateLink": {
+                                "uri": "[variables('aroTemplateUri')]",
+                                "contentVersion":"1.0.0.0"
+                            },
+                            "parameters": {
+                                "openShiftClusterName": {
+                                    "value": "[parameters('openShiftClusterName')]"
+                                },
+                                "vnetName": {
+                                    "value": "[variables('vnetName')]"
+                                },
+                                "vnetResourceGroupName": {
+                                    "value": "[variables('subnet1Name')]"
+                                },
+                                "PrimarySubnetName": {
+                                    "value": "[variables('subnet4Name')]"
+                                },
+                                "WorkerSubnetName": {
+                                    "value": "[variables('subnet5Name')]"
+                                },
+                                "domain": {
+                                    "value": "[variables('domain')]"
+                                },
+                                "version": {
+                                    "value": "[parameters('openShiftVersion')]"
+                                },
+                                "readOnlyResourceGroupName": {
+                                    "value": "[variables('readOnlyResourceGroupName')]"
                                 }
                             }
                         }
