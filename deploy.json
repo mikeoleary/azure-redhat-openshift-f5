@@ -31,7 +31,7 @@
             "metadata": {
                 "description": "Name of OpenShift cluster."
             },
-            "defaultValue": "*",
+            "defaultValue": "ocpcluster",
             "type": "string"
         },
         "domain": {
@@ -50,6 +50,18 @@
             "metadata": {
                 "description": "OpenShift Cluster Version"
             }
+        },
+        "servicePrincipalclientId": {
+            "type": "string",
+            "metadata":{
+                "description": "Service Principal with contributor rights on subscription"
+            }
+        },
+        "servicePrincipalclientSecret": {
+            "type": "securestring",
+            "metadata":{
+                "description": "Service Principal secret"
+            }
         }
     },
     "variables": {
@@ -63,7 +75,7 @@
         "subnet3Name": "Internal",
         "subnet4Name": "PrimarySubnet",
         "subnet5Name": "WorkerSubnet",
-        "uniqueStringForDnsZone": "[uniqueString( resourceGroup().id, subscription().name )]",
+        "uniqueStringForDnsZone": "[uniqueString( resourceGroup().id, subscription().id )]",
         "domain": "[if(equals(parameters('domain'), 'GENERATE_UNIQUE_DOMAIN_NAME'), parameters('domain'), variables('uniqueStringForDnsZone'))]",
         "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueStringForDnsZone'))]"
     },
@@ -154,6 +166,9 @@
                         "type": "Microsoft.Resources/deployments",
                         "apiVersion": "2018-05-01",
                         "name": "aroLinkedTemplate",
+                        "dependsOn": [
+                            "vnetLinkedTemplate"
+                        ],
                         "properties": {
                             "mode": "Incremental",
                             "templateLink": {
@@ -184,6 +199,12 @@
                                 },
                                 "readOnlyResourceGroupName": {
                                     "value": "[variables('readOnlyResourceGroupName')]"
+                                },
+                                "servicePrincipalclientId": {
+                                    "value": "[parameters('servicePrincipalclientId')]"
+                                },
+                                "servicePrincipalclientSecret": {
+                                    "value": "[parameters('servicePrincipalclientSecret')]"
                                 }
                             }
                         }
