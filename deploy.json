@@ -184,7 +184,7 @@
                                     "value": "[variables('vnetName')]"
                                 },
                                 "vnetResourceGroupName": {
-                                    "value": "[variables('subnet1Name')]"
+                                    "value": "[variables('resourceGroupName')]"
                                 },
                                 "PrimarySubnetName": {
                                     "value": "[variables('subnet4Name')]"
