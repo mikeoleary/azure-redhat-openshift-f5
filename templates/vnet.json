@@ -94,8 +94,24 @@
         }
       }
     },
-    "variables": {},
+    "variables": {
+      "AzureRedHatOpenShiftRPObjectId": "1684d4aa-11c7-48e0-88e3-40a035536eb4"
+    },
     "resources": [
+      {
+          "type": "Microsoft.Authorization/roleAssignments",
+          "apiVersion": "2018-09-01-preview",
+          "name": "[guid(resourceGroup().id)]",
+          "dependsOn": [
+            "[parameters('vnetName')]"
+          ],  
+          "properties": {
+              "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+              "principalId": "[variables('AzureRedHatOpenShiftRPObjectId')]",
+              "scope": "[concat(resourceGroup().id, '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'))]",
+              "CanDelegate": true
+          }
+      },
       {
         "type": "Microsoft.Network/virtualNetworks",
         "apiVersion": "2020-05-01",
@@ -158,7 +174,6 @@
             ],
             "properties": {
               "addressPrefix": "[parameters('subnet4Prefix')]",
-              "privateLinkServiceNetworkPolicies": "Disabled",
               "serviceEndpoints": [
                 {
                   "service": "Microsoft.ContainerRegistry"
