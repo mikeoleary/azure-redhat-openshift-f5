@@ -100,7 +100,7 @@
     "resources": [
       {
           "type": "Microsoft.Authorization/roleAssignments",
-          "apiVersion": "2018-09-01-preview",
+          "apiVersion": "2020-04-01-preview",
           "name": "[guid(resourceGroup().id)]",
           "dependsOn": [
             "[parameters('vnetName')]"
@@ -108,8 +108,7 @@
           "properties": {
               "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
               "principalId": "[variables('AzureRedHatOpenShiftRPObjectId')]",
-              "scope": "[resourceGroup().id]",
-              "CanDelegate": true
+              "scope": "[resourceGroup().id]"
           }
       },
       {
