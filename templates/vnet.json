@@ -108,7 +108,7 @@
           "properties": {
               "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
               "principalId": "[variables('AzureRedHatOpenShiftRPObjectId')]",
-              "scope": "[concat(resourceGroup().id, '/providers/Microsoft.Network/virtualNetworks/', parameters('vnetName'))]",
+              "scope": "[resourceGroup().id]",
               "CanDelegate": true
           }
       },
