@@ -173,6 +173,7 @@
             ],
             "properties": {
               "addressPrefix": "[parameters('subnet4Prefix')]",
+              "privateLinkServiceNetworkPolicies": "Disabled",
               "serviceEndpoints": [
                 {
                   "service": "Microsoft.ContainerRegistry"
