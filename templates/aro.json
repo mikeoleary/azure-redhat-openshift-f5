@@ -105,15 +105,5 @@
                 ]
             }
         }
-    ],
-    "outputs":{
-        "apiServerUrl": {
-          "type": "string",
-          "value": "[reference(parameters('openShiftClusterName')).properties.apiserverProfile.url]" 
-        },
-        "consoleProfileUrl":{
-            "type": "string",
-            "value": "[reference(parameters('openShiftClusterName')).properties.clusterProfile.url]" 
-        }
-    }
+    ]
 }
