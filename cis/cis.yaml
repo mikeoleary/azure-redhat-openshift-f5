@@ -4,7 +4,7 @@ metadata:
   name: bigip-login
   namespace: kube-system
 data:
-  username: admin
+  username: YWRtaW4=
   password: <base64password>
 ---
 apiVersion: v1
