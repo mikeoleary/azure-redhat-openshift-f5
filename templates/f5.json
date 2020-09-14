@@ -1359,21 +1359,29 @@
         }
     ],
     "outputs": {
-        "GUI-URL": {
+        "guiUrl": {
             "type": "string",
             "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat('https://',reference(concat(variables('mgmtNicId'), '0')).ipConfigurations[0].properties.privateIPAddress, ':', variables('bigIpMgmtPort')), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
         },
-        "SSH-URL": {
+        "sshUrl": {
             "type": "string",
             "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat(reference(concat(variables('mgmtNicId'), '0')).ipConfigurations[0].properties.privateIPAddress,' ',22), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
         },
-        "privateSelfIpAddress0":{
+        "privateInternalSelfIpAddress0":{
             "type": "string",
             "value": "[reference(concat(variables('intNicName'), '0')).IpConfigurations[0].properties.privateIPAddress]"
         },
-        "privateSelfIpAddress1":{
+        "privateInternalSelfIpAddress1":{
             "type": "string",
             "value": "[reference(concat(variables('intNicName'), '1')).IpConfigurations[0].properties.privateIPAddress]"
+        },
+        "privateMgmtIpAddress0":{
+            "type": "string",
+            "value": "[reference(concat(variables('mgmtNicName'), '0')).IpConfigurations[0].properties.privateIPAddress]"
+        },
+        "privateMgmtIpAddress1":{
+            "type": "string",
+            "value": "[reference(concat(variables('mgmtNicName'), '1')).IpConfigurations[0].properties.privateIPAddress]"
         }
     }
 }
