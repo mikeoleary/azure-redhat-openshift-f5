@@ -55,7 +55,7 @@
                 "[guid(resourceGroup().id)]"
             ],
             "location": "[resourceGroup().location]",
-            "kind": "AzurePowerShell", // or "AzureCLI"
+            "kind": "AzureCLI", // or  "AzurePowerShell"
             "identity": {
                 "type": "userAssigned",
                 "userAssignedIdentities": {

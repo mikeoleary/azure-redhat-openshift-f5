@@ -7,7 +7,9 @@
 1. **You will need a Service Principal in Azure with Contributor permissions on the Subscription.** This is because this template provides a Service Principal to the OCP cluster, which then requires permissions to create a Resource Group in the subscription.
 
 ## Instructions
-For the official instructions from Microsoft on deploying ARO, you can view [this tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster). These instructions are intended to be run from a Linux workstation with [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed. Instructions for deploying this demo environment with F5 via ARM template are below:
+For the official instructions from Microsoft on deploying ARO, you can view [this tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster). These instructions are intended to be run from a Linux workstation with [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed.  
+
+Instructions for deploying this demo environment with F5 via ARM template are below:
 1. Deploy ARM template by clicking the Deploy button above.
 2. Optionally, further configure F5 and OpenShift environment by accessing the environment via the URL's in the deployment outputs.
 
