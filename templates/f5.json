@@ -1382,6 +1382,14 @@
         "privateMgmtIpAddress1":{
             "type": "string",
             "value": "[reference(concat(variables('mgmtNicName'), '1')).IpConfigurations[0].properties.privateIPAddress]"
+        },
+        "publicMgmtAddress0":{
+            "type": "string",
+            "value": "[reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn]"
+        },
+        "publicMgmtAddress1":{
+            "type": "string",
+            "value": "[reference(concat(variables('mgmtPublicIPAddressId'), '1')).dnsSettings.fqdn]"
         }
     }
 }

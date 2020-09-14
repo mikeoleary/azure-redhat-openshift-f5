@@ -1,10 +1,14 @@
 #!/bin/bash
 
 ## THIS SCRIPT WILL CONFIGURE THE OCP CLUSTER AND BIG-IP TO PREPARE FOR CIS INTEGRATION VIA VXLAN OVERLAY
-ARO_API_SERVER=$1
-ARO_PASSWORD=$2
+ARO_CLUSTER_NAME=$1
+ARO_CLUSTER_RESOURCE_GROUP=$2
 BIGIP_MGMT_ADDRESS=$3
 BIGIP_MGMT_PASSWORD=$4
+
+#Get ARO cluster API server and password
+ARO_API_SERVER=$(az aro show --name $ARO_CLUSTER_NAME --resource-group $ARO_CLUSTER_RESOURCE_GROUP --query apiserverProfile.url -o tsv)
+ARO_PASSWORD=$(az aro list-credentials --name $ARO_CLUSTER_NAME --resource-group $ARO_CLUSTER_RESOURCE_GROUP | jq .kubeadminPassword -r)
 
 ##Download OC client tool
 wget https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/client/openshift-client-linux.tar.gz -O /tmp/openshift-client-linux.tar.gz

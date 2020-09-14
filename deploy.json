@@ -68,6 +68,8 @@
         "vnetTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/vnet.json",
         "f5TemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/f5.json",
         "aroTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/aro.json",
+        "deploymenScriptTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/deploymentScript.json",
+        "uamiTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/uami.json",
         "resourceGroupName": "[resourceGroup().name]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
         "subnet1Name": "Mgmt",
@@ -78,7 +80,8 @@
         "uniqueString": "[uniqueString( resourceGroup().id, subscription().id )]",
         "uniqueStringForDnsZone": "[substring(variables('uniqueString'), 0, 8)]",
         "domain": "[if(equals(parameters('domain'), 'GENERATE_UNIQUE_DOMAIN_NAME'), variables('uniqueStringForDnsZone'), parameters('domain'))]",
-        "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueStringForDnsZone'))]"
+        "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueStringForDnsZone'))]",
+        "uamiName": "[concat('uami-', variables('uniqueStringForDnsZone'))]"
     },
     "resources": [
                     {
@@ -206,6 +209,58 @@
                                 },
                                 "servicePrincipalclientSecret": {
                                     "value": "[parameters('servicePrincipalclientSecret')]"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "type": "Microsoft.Resources/deployments",
+                        "apiVersion": "2018-05-01",
+                        "name": "uamiLinkedTemplate",
+                        "properties": {
+                            "mode": "Incremental",
+                            "templateLink": {
+                                "uri": "[variables('uamiTemplateUri')]",
+                                "contentVersion":"1.0.0.0"
+                            },
+                            "parameters": {
+                                "resourceName": {
+                                    "value": "[variables('uamiName')]"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "type": "Microsoft.Resources/deployments",
+                        "apiVersion": "2018-05-01",
+                        "name": "deploymentScriptLinkedTemplate",
+                        "dependsOn": [
+                            "vnetLinkedTemplate",
+                            "f5LinkedTemplate",
+                            "aroLinkedTemplate",
+                            "uamiLinkedTemplate"
+                        ],
+                        "properties": {
+                            "mode": "Incremental",
+                            "templateLink": {
+                                "uri": "[variables('aroTemplateUri')]",
+                                "contentVersion":"1.0.0.0"
+                            },
+                            "parameters": {
+                                "userAssignedManagedIdentityId": {
+                                    "value": "[reference('uamiLinkedTemplate').outputs.identityId.value]"
+                                },
+                                "userAssignedManagedIdentityName": {
+                                    "value": "[variables('uamiName')]"
+                                },
+                                "aroClusterName": {
+                                    "value": "[parameters('openShiftClusterName')]"
+                                },
+                                "bigipMgmtAddress": {
+                                    "value": "[reference('f5LinkedTemplate').outputs.publicMgmtAddress0.value]"
+                                },
+                                "bigIpMgmtPassword": {
+                                    "value": "[parameters('password')]"
                                 }
                             }
                         }

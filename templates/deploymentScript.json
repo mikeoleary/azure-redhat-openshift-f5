@@ -1,0 +1,80 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "userAssignedManagedIdentityId": {
+            "type": "string",
+            "metadata": {
+                "description": "Id of User Assigned Managed Identity with Contributor permissions on RG"
+            }
+        },
+        "userAssignedManagedIdentityName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of User Assigned Managed Identity with Contributor permissions on RG"
+            }
+        },
+        "aroClusterName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of ARO cluster"
+            }
+        },
+        "bigipMgmtAddress": {
+            "type": "string",
+            "metadata": {
+                "description": "Public IP or DNS address of BIG-IP"
+            }
+        },
+        "bigIpMgmtPassword": {
+            "type": "secureString",
+            "metadata": {
+                "description": "Password of BIG-IP"
+            }
+        }
+    },
+    "variables":{
+        "containerGroupName": "[concat(parameters('aroClusterName'), '-containerGroup')]",
+        "primaryScriptUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/master/templates/deploymentScript.sh"
+        },
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2018-09-01-preview",
+            "name": "[guid(resourceGroup().id)]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[parameters('userAssignedManagedIdentityId')]"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2019-10-01-preview",
+            "name": "runPowerShellInline-checkAppServerStatus",
+            "dependsOn": [
+                "[guid(resourceGroup().id)]"
+            ],
+            "location": "[resourceGroup().location]",
+            "kind": "AzurePowerShell", // or "AzureCLI"
+            "identity": {
+                "type": "userAssigned",
+                "userAssignedIdentities": {
+                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedManagedIdentityName'))]": {}
+                }
+            },
+            "properties": {
+                "forceUpdateTag": 1,
+                "containerSettings": {
+                    "containerGroupName": "[variables('containerGroupName')]"
+                },
+                "azCliVersion": "2.9.1",   // or  "azPowerShellVersion": "3.0"
+                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('bigIpMgmtPassword'))]",
+                "primaryScriptUri": "[variables('primaryScriptUri')]",
+                "supportingScriptUris":[],
+                "timeout": "PT30M",
+                "cleanupPreference": "OnSuccess",
+                "retentionInterval": "P1D"
+            }
+        }
+    ]
+}
