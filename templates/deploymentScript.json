@@ -35,13 +35,13 @@
     },
     "variables":{
         "containerGroupName": "[concat(parameters('aroClusterName'), '-containerGroup')]",
-        "primaryScriptUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/master/templates/deploymentScript.sh"
+        "primaryScriptUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/deploymentScript.sh"
         },
     "resources": [
         {
             "type": "Microsoft.Authorization/roleAssignments",
             "apiVersion": "2018-09-01-preview",
-            "name": "[guid(resourceGroup().id)]",
+            "name": "[guid(resourceGroup().id, deployment().name)]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                 "principalId": "[parameters('userAssignedManagedIdentityId')]"
@@ -50,9 +50,9 @@
         {
             "type": "Microsoft.Resources/deploymentScripts",
             "apiVersion": "2019-10-01-preview",
-            "name": "runPowerShellInline-checkAppServerStatus",
+            "name": "runDeploymentScript",
             "dependsOn": [
-                "[guid(resourceGroup().id)]"
+                "[guid(resourceGroup().id, deployment().name)]"
             ],
             "location": "[resourceGroup().location]",
             "kind": "AzureCLI", // or  "AzurePowerShell"
