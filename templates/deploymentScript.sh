@@ -58,7 +58,7 @@ curl -s -k -X PATCH -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PAS
 rm -r /tmp/cis -f
 mkdir /tmp/cis
 wget https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/cis/cis.yaml -O /tmp/cis.yaml
-BIGIP_MGMT_PASSWORD_BASE64=$(echo  $BIGIP_MGMT_PASSWORD | base64)
+BIGIP_MGMT_PASSWORD_BASE64=$(echo -n  $BIGIP_MGMT_PASSWORD | base64)
 sed -i -e "s/<base64password>/$BIGIP_MGMT_PASSWORD_BASE64/" /tmp/cis.yaml
 sed -i -e "s/<bigipUrl>/$BIGIP_MGMT_PRIVATE_IP/" /tmp/cis.yaml
 oc apply -f /tmp/cis.yaml
