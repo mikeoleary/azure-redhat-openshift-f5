@@ -1,6 +1,6 @@
 # azure-redhat-openshift-f5
 
-## Pre-requisits
+## Pre-requisites
 1. **You will need a Service Principal in Azure with Contributor permissions on the Subscription.** This is because this template provides a Service Principal to the OCP cluster, which then requires permissions to create a Resource Group in the subscription.
 
 ## Instructions
