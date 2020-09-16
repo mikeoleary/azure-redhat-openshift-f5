@@ -280,20 +280,12 @@
                     }
                 ],
     "outputs": {
-        "guiUrl": {
+        "bigipGuiUrl": {
             "type": "string",
             "value": "[reference('f5LinkedTemplate').outputs.guiUrl.value]"        },
-        "sshUrl": {
+        "bigipSshUrl": {
             "type": "string",
             "value": "[reference('f5LinkedTemplate').outputs.sshUrl.value]"      
-        },
-        "apiserverProfileUrl": {
-            "type": "string",
-            "value": "[reference('aroLinkedTemplate').outputs.apiserverProfileUrl.value]"   
-        },
-        "apiserverProfileIp": {
-            "type": "string",
-            "value": "[reference('aroLinkedTemplate').outputs.apiserverProfileIp.value]"   
         },
         "publicExternalLoadBalancerAddress":{
             "type": "string",
