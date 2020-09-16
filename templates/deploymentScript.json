@@ -80,7 +80,13 @@
                     "containerGroupName": "[variables('containerGroupName')]"
                 },
                 "azCliVersion": "2.9.1",   // or  "azPowerShellVersion": "3.0"
-                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('bigIpMgmtPassword'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('customDomain'))]",
+                "environmentVariables": [
+                    {
+                        "name": "BIGIP_MGMT_PASSWORD",
+                        "secureValue": "[parameters('bigIpMgmtPassword')]"
+                    }
+                ],  
+                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('customDomain'))]",
                 "primaryScriptUri": "[variables('primaryScriptUri')]",
                 "supportingScriptUris":[],
                 "timeout": "PT30M",

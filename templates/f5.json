@@ -671,7 +671,8 @@
                 "linuxConfiguration": "[variables('linuxConfiguration')]"
             }
         },
-        "installCustomConfig": "[concat(variables('singleQuote'), '#!/bin/bash\n', variables('customConfig'), variables('singleQuote'))]"
+        "installCustomConfig": "[concat(variables('singleQuote'), '#!/bin/bash\n', variables('customConfig'), variables('singleQuote'))]",
+        "updateNetworkTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/updateNetwork.json"
     },
     "resources": [
         {
@@ -1042,7 +1043,36 @@
             "location": "[variables('location')]",
             "name": "[concat(variables('dnsLabel'), '-ext-nsg')]",
             "properties": {
-                "securityRules": []
+                "securityRules": [
+                    {
+                        "name": "ext_allow_http",
+                        "properties": {
+                            "access": "Allow",
+                            "description": "",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": 80,
+                            "direction": "Inbound",
+                            "priority": 100,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*"
+                        }
+                    },
+                    {
+                        "name": "ext_allow_https",
+                        "properties": {
+                            "access": "Allow",
+                            "description": "",
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": 443,
+                            "direction": "Inbound",
+                            "priority": 101,
+                            "protocol": "Tcp",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*"
+                        }
+                    }
+                ]
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "type": "Microsoft.Network/networkSecurityGroups"
@@ -1077,6 +1107,68 @@
                             }
                         },
                         "name": "frontendIPConfigurations"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "name": "demoAppLbRule-80",
+                        "properties": {
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/backendAddressPools/loadBalancerBackEnd')]"
+                            },
+                            "backendPort": 80,
+                            "enableFloatingIP": false,
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/frontendIpConfigurations/loadBalancerFrontEnd1')]"
+                            },
+                            "frontendPort": 80,
+                            "idleTimeoutInMinutes": 15,
+                            "loadDistribution": "Default",
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/probes/tcp-probe-80')]"
+                            },
+                            "protocol": "Tcp"
+                        }
+                    },
+                    {
+                        "name": "demoAppLbRule-443",
+                        "properties": {
+                            "backendAddressPool": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/backendAddressPools/loadBalancerBackEnd')]"
+                            },
+                            "backendPort": 443,
+                            "enableFloatingIP": false,
+                            "frontendIPConfiguration": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/frontendIpConfigurations/loadBalancerFrontEnd1')]"
+                            },
+                            "frontendPort": 443,
+                            "idleTimeoutInMinutes": 15,
+                            "loadDistribution": "Default",
+                            "probe": {
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/probes/tcp-probe-443')]"
+                            },
+                            "protocol": "Tcp"
+                        }
+                    }
+                ],
+                "probes": [
+                    {
+                        "name": "tcp-probe-80",
+                        "properties": {
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2,
+                            "port": 80,
+                            "protocol": "Tcp"
+                        }
+                    },
+                    {
+                        "name": "tcp-probe-443",
+                        "properties": {
+                            "intervalInSeconds": 5,
+                            "numberOfProbes": 2,
+                            "port": 443,
+                            "protocol": "Tcp"
+                        }
                     }
                 ]
             },
@@ -1356,7 +1448,33 @@
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "type": "Microsoft.Compute/virtualMachines/extensions"
-        }
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "deploy",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('updateNetworkTemplateUri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                "virtualNetworkName": {
+                    "value": "[parameters('vnetName')]"
+                },
+                "subnetName": {
+                    "value": "[variables('extSubnetName')]"
+                },
+                "subnetAddressPrefix": {
+                    "value": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), variables('extSubnetName')), '2018-03-01').addressPrefix]"
+                },
+                "nsgId": {
+                    "value": "[variables('extNsgID')]"
+                }
+                }
+            }
+            }
     ],
     "outputs": {
         "guiUrl": {
