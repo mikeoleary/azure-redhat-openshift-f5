@@ -298,6 +298,22 @@
         "publicExternalLoadBalancerAddress":{
             "type": "string",
             "value": "[reference('f5LinkedTemplate').outputs.publicExternalLoadBalancerAddress.value]"   
+        },
+        "aro_api_server": {
+            "type": "string",
+            "value": "[reference('deploymentScriptLinkedTemplate').outputs.aro_api_server.value]"
+        },
+        "aro_console_url": {
+            "type": "string",
+            "value": "[reference('deploymentScriptLinkedTemplate').outputs.aro_console_url.value]"
+        },  
+        "aro_username": {
+            "type": "string",
+            "value": "[reference('deploymentScriptLinkedTemplate').outputs.aro_username.value]"
+        },   
+        "aro_password": {
+            "type": "string",
+            "value": "[reference('deploymentScriptLinkedTemplate').outputs.aro_password.value]"
         }
     }
 }

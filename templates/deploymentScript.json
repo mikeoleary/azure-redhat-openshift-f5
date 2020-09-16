@@ -96,9 +96,21 @@
         }
     ],
     "outputs":{
-        "aro_api_server": "[reference('runDeploymentScript').outputs.aro_api_server]",  
-        "aro_console_url": "[reference('runDeploymentScript').outputs.aro_console_url]",  
-        "aro_username": "[reference('runDeploymentScript').outputs.aro_username]",   
-        "aro_password": "[reference('runDeploymentScript').outputs.aro_password]"
+        "aro_api_server": {
+            "type": "string",
+            "value": "[reference('runDeploymentScript').outputs.aro_api_server]"
+        },
+        "aro_console_url": {
+            "type": "string",
+            "value": "[reference('runDeploymentScript').outputs.aro_console_url]"
+        },  
+        "aro_username": {
+            "type": "string",
+            "value": "[reference('runDeploymentScript').outputs.aro_username]"
+        },   
+        "aro_password": {
+            "type": "string",
+            "value": "[reference('runDeploymentScript').outputs.aro_password]"
+        }
     }
 }
