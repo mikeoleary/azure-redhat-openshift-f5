@@ -6,9 +6,10 @@
             "metadata": {
                 "description": "User Name for network devices"
             },
+            "defaultValue": "azureuser",
             "type": "string"
         },
-        "password": {
+        "bigipVmPassword": {
             "metadata": {
                 "description": "Password or SSH public key to login to the Virtual Machine. Note: There are a number of special characters that you should avoid using for F5 product user accounts.  See [K2873](https://support.f5.com/csp/article/K2873) for details. Note: If using key-based authentication, this should be the public key as a string, typically starting with **---- BEGIN SSH2 PUBLIC KEY ----** and ending with **---- END SSH2 PUBLIC KEY ----**."
             },
@@ -51,22 +52,22 @@
                 "description": "OpenShift Cluster Version"
             }
         },
-        "servicePrincipalclientId": {
+        "servicePrincipalClientId": {
             "type": "string",
             "metadata":{
                 "description": "Service Principal with contributor rights on subscription"
             }
         },
-        "servicePrincipalclientSecret": {
+        "servicePrincipalClientSecret": {
             "type": "securestring",
             "metadata":{
                 "description": "Service Principal secret"
             }
         },
-        "customDomain":{
+        "myDemoAppURL":{
             "type": "string",
             "metadata":{
-                "description": "Custom Domain Name. Point this domain to the IP address that is output by this deployment."
+                "description": "Eg 'demoapp.mydomain.com'. After the deployment you will need to point this DNS record to the IP address value of the output called publicExternalLoadBalancerAddress."
             }            
         }
     },
@@ -140,7 +141,7 @@
                                     "value": "[parameters('adminUserName')]"
                                 },
                                 "adminPasswordOrKey":{
-                                    "value": "[parameters('password')]"
+                                    "value": "[parameters('bigipVmPassword')]"
                                 },
                                 "dnsLabel":{
                                     "value": "[parameters('dnsLabel')]"
@@ -211,10 +212,10 @@
                                     "value": "[variables('readOnlyResourceGroupName')]"
                                 },
                                 "servicePrincipalclientId": {
-                                    "value": "[parameters('servicePrincipalclientId')]"
+                                    "value": "[parameters('servicePrincipalClientId')]"
                                 },
                                 "servicePrincipalclientSecret": {
-                                    "value": "[parameters('servicePrincipalclientSecret')]"
+                                    "value": "[parameters('servicePrincipalClientSecret')]"
                                 }
                             }
                         }
@@ -266,13 +267,13 @@
                                     "value": "[reference('f5LinkedTemplate').outputs.publicMgmtAddress0.value]"
                                 },
                                 "bigIpMgmtPassword": {
-                                    "value": "[parameters('password')]"
+                                    "value": "[parameters('bigipVmPassword')]"
                                 },
                                 "privateExternalVirtualIpAddress0": {
                                     "value": "[reference('f5LinkedTemplate').outputs.privateExternalVirtualIpAddress0.value]"
                                 },
                                 "customDomain":{
-                                    "value": "[parameters('customDomain')]"
+                                    "value": "[parameters('myDemoAppURL')]"
                                 }
                             }
                         }
