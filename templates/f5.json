@@ -1451,7 +1451,7 @@
         },
         {
             "apiVersion": "2017-08-01",
-            "name": "deploy",
+            "name": "updateNetworkLinkedTemplate",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
