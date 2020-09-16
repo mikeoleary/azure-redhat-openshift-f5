@@ -62,6 +62,12 @@
             "metadata":{
                 "description": "Service Principal secret"
             }
+        },
+        "customDomain":{
+            "type": "string",
+            "metadata":{
+                "description": "Custom Domain Name. Point this domain to the IP address that is output by this deployment."
+            }            
         }
     },
     "variables": {
@@ -261,6 +267,12 @@
                                 },
                                 "bigIpMgmtPassword": {
                                     "value": "[parameters('password')]"
+                                },
+                                "privateExternalVirtualIpAddress0": {
+                                    "value": "[reference('f5LinkedTemplate').outputs.privateExternalVirtualIpAddress0.value]"
+                                },
+                                "customDomain":{
+                                    "value": "[parameters('customDomain')]"
                                 }
                             }
                         }
@@ -281,6 +293,10 @@
         "apiserverProfileIp": {
             "type": "string",
             "value": "[reference('aroLinkedTemplate').outputs.apiserverProfileIp.value]"   
+        },
+        "publicExternalLoadBalancerAddress":{
+            "type": "string",
+            "value": "[reference('f5LinkedTemplate').outputs.publicExternalLoadBalancerAddress.value]"   
         }
     }
 }

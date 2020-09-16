@@ -31,6 +31,18 @@
             "metadata": {
                 "description": "Password of BIG-IP"
             }
+        },
+        "privateExternalVirtualIpAddress0": {
+            "type": "string",
+            "metadata": {
+                "description": "Private IP of VIP on BIG-IP for route-vserver-addr"
+            }
+        },
+        "customDomain": {
+            "type": "string",
+            "metadata": {
+                "description": "Custom Domain Name. Point this domain to the IP address that is output by this deployment."
+            }
         }
     },
     "variables":{
@@ -68,7 +80,7 @@
                     "containerGroupName": "[variables('containerGroupName')]"
                 },
                 "azCliVersion": "2.9.1",   // or  "azPowerShellVersion": "3.0"
-                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('bigIpMgmtPassword'))]",
+                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('bigIpMgmtPassword'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('customDomain'))]",
                 "primaryScriptUri": "[variables('primaryScriptUri')]",
                 "supportingScriptUris":[],
                 "timeout": "PT30M",

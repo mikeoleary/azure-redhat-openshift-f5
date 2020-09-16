@@ -107,8 +107,8 @@ spec:
             "--agent=as3",
             "--insecure=true",
             "--as3-validation=false",
-            "--manage-routes=false",
-            "--route-vserver-addr=1.1.1.1",
+            "--manage-routes=true",
+            "--route-vserver-addr=<vserver-addr>",
             "--log-as3-response=true",
             "--log-level=DEBUG"
             ]

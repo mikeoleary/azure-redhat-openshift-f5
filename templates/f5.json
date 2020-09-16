@@ -1390,6 +1390,18 @@
         "publicMgmtAddress1":{
             "type": "string",
             "value": "[reference(concat(variables('mgmtPublicIPAddressId'), '1')).dnsSettings.fqdn]"
+        },
+        "privateExternalVirtualIpAddress0":{
+            "type": "string",
+            "value": "[reference(concat(variables('extNicName'), '0')).IpConfigurations[1].properties.privateIPAddress]"
+        },
+        "privateExternalVirtualIpAddress1":{
+            "type": "string",
+            "value": "[reference(concat(variables('extNicName'), '1')).IpConfigurations[1].properties.privateIPAddress]"
+        },
+        "publicExternalLoadBalancerAddress":{
+            "type": "string",
+            "value": "[reference(concat(variables('extPublicIPAddressNamePrefix'), '0')).IpAddress]"
         }
     }
 }
