@@ -94,5 +94,11 @@
                 "retentionInterval": "P1D"
             }
         }
-    ]
+    ],
+    "outputs":{
+        "aro_api_server": "[reference('runDeploymentScript').outputs.aro_api_server]",  
+        "aro_console_url": "[reference('runDeploymentScript').outputs.aro_console_url]",  
+        "aro_username": "[reference('runDeploymentScript').outputs.aro_username]",   
+        "aro_password": "[reference('runDeploymentScript').outputs.aro_password]"
+    }
 }

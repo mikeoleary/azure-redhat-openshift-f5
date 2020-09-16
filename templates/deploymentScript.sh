@@ -67,8 +67,8 @@ curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASS
 #set allowed services on selfIP of Internal VLAN to be default + tcp:4789
 curl -s -k -X PATCH -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS/mgmt/tm/net/self/self_3nic -d '{"allowService": ["default","tcp:4789"]}'
 #Create routes on BIG-IP so that traffic to the Master and Worker nodes traverses the internal NIC
-curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS/mgmt/tm/net/route/ -d '{"name": "routeMasterNodes", "partition": "Common", "gw": "'"$BIGIP_INT_GW"'", "network": "'"$MASTER_SUBNET_IP_CIDR"'"}'
-curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS/mgmt/tm/net/route/ -d '{"name": "routeWorkerNodes", "partition": "Common", "gw": "'"$BIGIP_INT_GW"'", "network": "'"$WORKER_SUBNET_IP_CIDR"'"}'
+curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS/mgmt/tm/net/route -d '{"name": "routeMasterNodes", "partition": "Common", "gw": "'"$BIGIP_INT_GW"'", "network": "'"$MASTER_SUBNET_IP_CIDR"'"}'
+curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS/mgmt/tm/net/route -d '{"name": "routeWorkerNodes", "partition": "Common", "gw": "'"$BIGIP_INT_GW"'", "network": "'"$WORKER_SUBNET_IP_CIDR"'"}'
 
 ##Deploy demoapp
 rm /tmp/demoapp.yaml -f
