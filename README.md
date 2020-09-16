@@ -12,6 +12,9 @@ Instructions for deploying this demo environment with F5 via ARM template are be
 
 For the official instructions from Microsoft on deploying ARO, you can view [this tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster). These instructions are intended to be run from a Linux workstation with [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed.  
 
+## Architecture
+![Image of Architecture](images/ARO-with-f5.png)
+
 ## Pledge for Racial Equality, Diversity, and Inclusion
 I do not represent F5 and the code in this repo is my own, but I do work for F5. F5 has [pledged](https://www.f5.com/company/blog/our-pledge-for-racial-equality--diversity--and-inclusion) to fight against racism, and I have joined that pledge. Part of this effort includes updating our code and documentation to discontinue the use of terms that may be considered racially charged.  
   
