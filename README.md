@@ -2,7 +2,6 @@
 
 ## Pre-requisites
 1. **You will need a Service Principal (SP) in AzureAD with a secret. This SP will require Contributor permissions on the Resource Group into which you deploy.** In practice, this means either create a Resource Group prior to deploying into it, and give a SP Contributor rights, or, create a new RG with this deployment and use a SP with Contributor rights over the subscription.
-2. If you choose to do this with imperative [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) commands following Microsoft's instructions in their [tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster), you will need to register the Resource Provider (RP) name Microsoft.RedHatOpenShift. **If deploying via ARM template, this will be done automatically for you if the RP not already registered in your subscription.** 
 
 ## Instructions
 Instructions for deploying this demo environment with F5 via ARM template are below:
@@ -13,7 +12,7 @@ Instructions for deploying this demo environment with F5 via ARM template are be
 2. Create or edit a public DNS A record so that the Custom DNS Record you entered into the deployment points to the IP address value in the output called publicExternalLoadBalancerAddress.
 3. Optionally, further configure F5 and OpenShift environment by accessing the environment via the URL's in the deployment outputs.
 
-For the official instructions from Microsoft on deploying ARO, you can view [this tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster). These instructions are intended to be run from a Linux workstation with [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed.  
+Alternatively, for the official instructions from Microsoft on deploying ARO, you can view [this tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster). These instructions are intended to be run from a Linux workstation with [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed. However, following these instructions will not create the architecture pictured below, which is the intention of this ARM deployment above.
 
 ## Architecture
 ![Image of Architecture](images/ARO-with-f5.png)
