@@ -1,12 +1,15 @@
 # azure-redhat-openshift-f5
 
 ## Pre-requisites
-1. **You will need a Service Principal in Azure with Contributor permissions on the Subscription.** This is because this template provides a Service Principal to the OCP cluster, which then requires permissions to create a Resource Group in the subscription.
+1. **You will need a Service Principal (SP) in AzureAD with a secret. This SP will require Contributor permissions on the Resource Group into which you deploy.** In practice, this means either create a Resource Group prior to deploying into it, and give a SP Contributor rights, or, create a new RG with this deployment and use a SP with Contributor rights over the subscription.
+2. If you choose to do this with imperative [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) commands following Microsoft's instructions in their [tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster), you will need to register the Resource Provider Microsoft.RedHatOpenShift. **If deploying via ARM template, this will be done automatically for you if the RP not already registered in your subscription.** 
 
 ## Instructions
 Instructions for deploying this demo environment with F5 via ARM template are below:
 1. Deploy ARM template by clicking the Deploy button below.  
-  [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmikeoleary%2Fazure-redhat-openshift-f5%2Fmain%2Fdeploy.json)
+
+  [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmikeoleary%2Fazure-redhat-openshift-f5%2Fmain%2Fdeploy.json)  
+  
 2. Create or edit a public DNS A record so that the Custom DNS Record you entered into the deployment points to the IP address value in the output called publicExternalLoadBalancerAddress.
 3. Optionally, further configure F5 and OpenShift environment by accessing the environment via the URL's in the deployment outputs.
 
