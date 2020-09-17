@@ -1,7 +1,7 @@
 # azure-redhat-openshift-f5
 
 ## Pre-requisites
-1. **You will need a Service Principal (SP) in AzureAD with a secret. This SP will require Contributor permissions on the Resource Group into which you deploy.** In practice, this means either create a Resource Group prior to deploying into it, and give a SP Contributor rights, or, create a new RG with this deployment and use a SP with Contributor rights over the subscription.
+1. **You will need a Service Principal (SP) in AzureAD with a secret. This SP will require Contributor permissions on the Resource Group into which you deploy.** In practice, this means either create a Resource Group prior to deploying into it, and give a SP Contributor rights, or, use a SP with Contributor rights over the subscription.
 
 ## Instructions
 Instructions for deploying this demo environment with F5 via ARM template are below:
