@@ -2,7 +2,7 @@
 
 ## Pre-requisites
 1. **You will need a Service Principal (SP) in AzureAD with a secret. This SP will require Contributor permissions on the Resource Group into which you deploy.** In practice, this means either create a Resource Group prior to deploying into it, and give a SP Contributor rights, or, create a new RG with this deployment and use a SP with Contributor rights over the subscription.
-2. If you choose to do this with imperative [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) commands following Microsoft's instructions in their [tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster), you will need to register the Resource Provider Microsoft.RedHatOpenShift. **If deploying via ARM template, this will be done automatically for you if the RP not already registered in your subscription.** 
+2. If you choose to do this with imperative [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) commands following Microsoft's instructions in their [tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster), you will need to register the Resource Provider (RP) name Microsoft.RedHatOpenShift. **If deploying via ARM template, this will be done automatically for you if the RP not already registered in your subscription.** 
 
 ## Instructions
 Instructions for deploying this demo environment with F5 via ARM template are below:
