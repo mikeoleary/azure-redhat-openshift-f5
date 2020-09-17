@@ -91,7 +91,7 @@
                 "supportingScriptUris":[],
                 "timeout": "PT30M",
                 "cleanupPreference": "OnExpiration",
-                "retentionInterval": "PT20M"
+                "retentionInterval": "P1D"
             }
         }
     ],
