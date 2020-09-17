@@ -280,12 +280,13 @@
                     }
                 ],
     "outputs": {
-        "bigipGuiUrl": {
+        "guiUrlDevice0": {
             "type": "string",
-            "value": "[reference('f5LinkedTemplate').outputs.guiUrl.value]"        },
-        "bigipSshUrl": {
+            "value": "[reference('f5LinkedTemplate').outputs.guiUrlDevice0.value]"        
+        },
+        "guiUrlDevice1": {
             "type": "string",
-            "value": "[reference('f5LinkedTemplate').outputs.sshUrl.value]"      
+            "value": "[reference('f5LinkedTemplate').outputs.guiUrlDevice1.value]"      
         },
         "publicExternalLoadBalancerAddress":{
             "type": "string",

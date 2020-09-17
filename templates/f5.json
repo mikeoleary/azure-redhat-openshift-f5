@@ -1477,13 +1477,13 @@
             }
     ],
     "outputs": {
-        "guiUrl": {
+        "guiUrlDevice0": {
             "type": "string",
             "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat('https://',reference(concat(variables('mgmtNicId'), '0')).ipConfigurations[0].properties.privateIPAddress, ':', variables('bigIpMgmtPort')), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
         },
-        "sshUrl": {
+        "guiUrlDevice1": {
             "type": "string",
-            "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat(reference(concat(variables('mgmtNicId'), '0')).ipConfigurations[0].properties.privateIPAddress,' ',22), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
+            "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat('https://',reference(concat(variables('mgmtNicId'), '1')).ipConfigurations[0].properties.privateIPAddress, ':', variables('bigIpMgmtPort')), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
         },
         "privateInternalSelfIpAddress0":{
             "type": "string",
