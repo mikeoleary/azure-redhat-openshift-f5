@@ -24,7 +24,7 @@
         },
         "identityName": {
             "type": "string",
-            "value": "[reference(parameters('resourceName')).name]"
+            "value": "[parameters('resourceName')]"
         }
     }
 }

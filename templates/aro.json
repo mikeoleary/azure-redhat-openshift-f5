@@ -75,6 +75,9 @@
             "type": "Microsoft.RedHatOpenShift/openShiftClusters",
             "apiVersion": "2020-04-30",
             "name": "[parameters('openShiftClusterName')]",
+            "dependsOn": [
+                "[guid(subscription().subscriptionId, resourceGroup().id )]"
+            ],
             "location": "[variables('location')]",
             "properties": {
                 "clusterProfile": {
