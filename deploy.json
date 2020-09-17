@@ -258,7 +258,7 @@
                                     "value": "[reference('uamiLinkedTemplate').outputs.identityId.value]"
                                 },
                                 "userAssignedManagedIdentityName": {
-                                    "value": "[variables('uamiName')]"
+                                    "value": "[reference('uamiLinkedTemplate').outputs.identityName.value]"
                                 },
                                 "aroClusterName": {
                                     "value": "[parameters('openShiftClusterName')]"

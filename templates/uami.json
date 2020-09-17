@@ -21,6 +21,10 @@
         "identityId": {
             "type": "string",
             "value": "[reference(parameters('resourceName')).principalId]"
+        },
+        "identityName": {
+            "type": "string",
+            "value": "[reference(parameters('resourceName')).name]"
         }
     }
 }
