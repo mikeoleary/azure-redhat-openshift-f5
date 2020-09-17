@@ -92,7 +92,13 @@
         "metadata": {
           "description": "Location for all resources."
         }
-      }
+      },
+      "servicePrincipalclientId": {
+            "type": "string",
+            "metadata":{
+                "description": "Service Principal Id"
+            }
+        }
     },
     "variables": {
       "AzureRedHatOpenShiftRPObjectId": "1684d4aa-11c7-48e0-88e3-40a035536eb4"
@@ -108,6 +114,16 @@
           "properties": {
               "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
               "principalId": "[variables('AzureRedHatOpenShiftRPObjectId')]",
+              "scope": "[resourceGroup().id]"
+          }
+      },
+      {
+          "type": "Microsoft.Authorization/roleAssignments",
+          "apiVersion": "2020-04-01-preview",
+          "name": "[guid(subscription().subscriptionId, resourceGroup().id )]",
+          "properties": {
+              "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+              "principalId": "[parameters('servicePrincipalclientId')]",
               "scope": "[resourceGroup().id]"
           }
       },

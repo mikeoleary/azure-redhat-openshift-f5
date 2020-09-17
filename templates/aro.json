@@ -62,22 +62,9 @@
     },
     "resources": [
         {
-          "type": "Microsoft.Authorization/roleAssignments",
-          "apiVersion": "2020-04-01-preview",
-          "name": "[guid(subscription().subscriptionId, resourceGroup().id )]",
-          "properties": {
-              "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-              "principalId": "[parameters('servicePrincipalclientId')]",
-              "scope": "[resourceGroup().id]"
-          }
-        },
-        {
             "type": "Microsoft.RedHatOpenShift/openShiftClusters",
             "apiVersion": "2020-04-30",
             "name": "[parameters('openShiftClusterName')]",
-            "dependsOn": [
-                "[guid(subscription().subscriptionId, resourceGroup().id )]"
-            ],
             "location": "[variables('location')]",
             "properties": {
                 "clusterProfile": {

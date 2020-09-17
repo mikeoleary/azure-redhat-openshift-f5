@@ -119,6 +119,9 @@
                                 },
                                 "subnet5Name": {
                                     "value": "[variables('subnet5Name')]"
+                                },
+                                "servicePrincipalclientSecret": {
+                                    "value": "[parameters('servicePrincipalClientSecret')]"
                                 }
                             }
                         }
