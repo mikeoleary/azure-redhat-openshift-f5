@@ -90,8 +90,8 @@
                 "primaryScriptUri": "[variables('primaryScriptUri')]",
                 "supportingScriptUris":[],
                 "timeout": "PT30M",
-                "cleanupPreference": "OnSuccess",
-                "retentionInterval": "P1D"
+                "cleanupPreference": "OnExpiration",
+                "retentionInterval": "PT20M"
             }
         }
     ],
