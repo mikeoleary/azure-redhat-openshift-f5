@@ -5,12 +5,12 @@
 
 ## Instructions
 Instructions for deploying this demo environment with F5 via ARM template are below:
-1. Deploy ARM template by clicking the Deploy button below.  
+1. **Deploy ARM template** by clicking the Deploy button below.  
 
   [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmikeoleary%2Fazure-redhat-openshift-f5%2Fmain%2Fdeploy.json)  
   
 2. **Create or edit a public DNS record** so that the Custom DNS Record you entered into the deployment points to the IP address value in the output called `publicExternalLoadBalancerAddress`.
-3. Optionally, further configure F5 and OpenShift environment by accessing the environment via the URL's in the deployment outputs.
+3. **Optionally, further configure** F5 and OpenShift environment by accessing the environment via the URL's in the deployment outputs.
 
 Alternatively, for the official instructions from Microsoft on deploying ARO, you can view [this tutorial](https://docs.microsoft.com/en-us/azure/openshift/tutorial-create-cluster). These instructions are intended to be run from a Linux workstation with [az cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) installed. However, following these instructions will not create the architecture pictured below, which is the intention of this ARM deployment above.
 
