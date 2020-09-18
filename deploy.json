@@ -39,6 +39,9 @@
             "metadata": {
                 "description": "DNS domain of your cluster. Must be globally unique and resolvable in DNS. Leave as default value if you do not have your own DNS domain name."
             },
+            "allowedValues": [
+                "GENERATE_UNIQUE_DOMAIN_NAME"
+            ],
             "defaultValue": "GENERATE_UNIQUE_DOMAIN_NAME",
             "type": "string"
         },
