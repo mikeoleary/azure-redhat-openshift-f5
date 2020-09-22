@@ -87,11 +87,11 @@
         "subnet3Name": "Internal",
         "subnet4Name": "PrimarySubnet",
         "subnet5Name": "WorkerSubnet",
-        "uniqueString": "[uniqueString( resourceGroup().id, subscription().id )]",
-        "uniqueStringForDnsZone": "[substring(variables('uniqueString'), 0, 8)]",
+        "uniqueString": "[uniqueString( resourceGroup().id, subscription().id, deployment().name )]",
+        "uniqueStringForDnsZone": "[concat('ocp', variables('uniqueString'))]",
         "domain": "[if(equals(parameters('domain'), 'GENERATE_UNIQUE_DOMAIN_NAME'), variables('uniqueStringForDnsZone'), parameters('domain'))]",
-        "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueStringForDnsZone'))]",
-        "uamiName": "[concat('uami-', variables('uniqueStringForDnsZone'))]"
+        "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueString'))]",
+        "uamiName": "[concat('uami-', variables('uniqueString'))]"
     },
     "resources": [
                     {
