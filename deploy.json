@@ -275,6 +275,9 @@
                                 "privateExternalVirtualIpAddress0": {
                                     "value": "[reference('f5LinkedTemplate').outputs.privateExternalVirtualIpAddress0.value]"
                                 },
+                                "privateInternalSelfIpAddressFloat":{
+                                    "value": "[reference('f5LinkedTemplate').outputs.privateInternalSelfIpAddressFloat.value]"
+                                },
                                 "customDomain":{
                                     "value": "[parameters('myDemoAppURL')]"
                                 }

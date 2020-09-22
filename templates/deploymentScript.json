@@ -38,6 +38,12 @@
                 "description": "Private IP of VIP on BIG-IP for route-vserver-addr"
             }
         },
+        "privateInternalSelfIpAddressFloat": {
+            "type": "string",
+            "metadata": {
+                "description": "Internal Float IP of BIG-IP"
+            }
+        },
         "customDomain": {
             "type": "string",
             "metadata": {
@@ -86,7 +92,7 @@
                         "secureValue": "[parameters('bigIpMgmtPassword')]"
                     }
                 ],  
-                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('customDomain'))]",
+                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('privateInternalSelfIpAddressFloat'), ' ', parameters('customDomain'))]",
                 "primaryScriptUri": "[variables('primaryScriptUri')]",
                 "supportingScriptUris":[],
                 "timeout": "PT30M",
