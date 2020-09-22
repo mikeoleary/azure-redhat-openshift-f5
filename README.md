@@ -17,6 +17,9 @@ Alternatively, for the official instructions from Microsoft on deploying ARO, yo
 ## Architecture
 ![Image of Architecture](images/ARO-with-f5.png)
 
+## Learning this demo
+Engineers or customers who would like to learn how this demo works should read [DEMO_FLOW_OVERVIEW.md](DEMO_FLOW_OVERVIEW.md). This document outlines the flow of the demo and is purely for educational purposes.
+
 ## Pledge for Racial Equality, Diversity, and Inclusion
 I do not represent F5 and the code in this repo is my own, but I do work for F5. F5 has [pledged](https://www.f5.com/company/blog/our-pledge-for-racial-equality--diversity--and-inclusion) to fight against racism, and I have joined that pledge. Part of this effort includes updating our code and documentation to discontinue the use of terms that may be considered racially charged.  
   
