@@ -96,7 +96,7 @@
         "aroTemplateUri": "[concat(variables('resourcesUrl'), 'aro.json')]",
         "deploymentScriptTemplateUri": "[concat(variables('resourcesUrl'), 'deploymentScript.json')]",
         "uamiTemplateUri": "[concat(variables('resourcesUrl'), 'uami.json')]",
-        "primaryScriptUri": "[concat(variables('resourcesUrl'), 'deploymentScriptDevicA.sh')]",
+        "primaryScriptUri": "[concat(variables('resourcesUrl'), 'deploymentScriptDeviceA.sh')]",
         "resourceGroupName": "[resourceGroup().name]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
         "subnet1Name": "Mgmt",
