@@ -96,6 +96,7 @@
         "aroTemplateUri": "[concat(variables('resourcesUrl'), 'aro.json')]",
         "deploymentScriptTemplateUri": "[concat(variables('resourcesUrl'), 'deploymentScript.json')]",
         "uamiTemplateUri": "[concat(variables('resourcesUrl'), 'uami.json')]",
+        "primaryScriptUri": "[concat(variables('resourcesUrl'), 'deploymentScriptDevicA.sh')]",
         "resourceGroupName": "[resourceGroup().name]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
         "subnet1Name": "Mgmt",
@@ -293,7 +294,8 @@
                             "vnetLinkedTemplate",
                             "f5LinkedTemplate",
                             "aroLinkedTemplate",
-                            "uamiLinkedTemplate"
+                            "uamiLinkedTemplate",
+                            "updateNetworkLinkedTemplate"
                         ],
                         "properties": {
                             "mode": "Incremental",
@@ -325,6 +327,9 @@
                                 },
                                 "customDomain":{
                                     "value": "[parameters('myDemoAppURL')]"
+                                },
+                                "primaryScriptUri":{
+                                    "value": "[variables('primaryScriptUri')]"
                                 }
                             }
                         }

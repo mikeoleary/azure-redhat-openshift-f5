@@ -49,11 +49,17 @@
             "metadata": {
                 "description": "Custom Domain Name. Point this domain to the IP address that is output by this deployment."
             }
+        },
+        "primaryScriptUri": {
+            "type": "string",
+            "metadata": {
+                "description": "URI for script to run"
+            }
         }
     },
     "variables":{
         "containerGroupName": "[concat(parameters('aroClusterName'), '-containerGroup')]",
-        "primaryScriptUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/deploymentScript.sh"
+        "primaryScriptUri": "[parameters('primaryScriptUri')]"
         },
     "resources": [
         {
