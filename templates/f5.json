@@ -347,7 +347,13 @@
                 "description": "This deployment can provide F5 with high-level device use information to optimize development resources. If you select **No** the information is not sent."
             },
             "type": "string"
-        }
+        },
+        "intSubnetPrivateFloatIPAddress": {
+            "metadata": {
+                "description": "Because we want a Static IP on internal NIC for Float address, so that CFE can move it, we will pass this IP address in as a parameter input."
+            },
+            "type": "string"
+        } 
     },
     "variables": {
         "computeApiVersion": "2017-12-01",
@@ -484,7 +490,6 @@
         "intSubnetPrivateAddress2": "[concat(variables('intSubnetPrivateAddressPrefix'), variables('intSubnetPrivateAddressSuffix1'))]",
         "intSubnetPrivateAddress3": "[concat(variables('intSubnetPrivateAddressPrefix'), variables('intSubnetPrivateAddressSuffix2'))]",
         "internalLoadBalancerAddress": "[concat(variables('intSubnetPrivateAddressPrefix'), variables('intSubnetPrivateAddressSuffix3'))]",
-        "intSubnetPrivateAddress4": "[concat(variables('intSubnetPrivateAddressPrefix'), variables('intSubnetPrivateAddressSuffix4'))]",
         "availabilitySetName": "[concat(variables('dnsLabel'), '-avset')]",
         "zoneMappings": "[replace(toLower(string(providers('Microsoft.Compute', 'virtualMachines').zoneMappings)), ' ', '')]",
         "southcentralus": "[equals(variables('location'), string('southcentralus'))]",
@@ -514,7 +519,6 @@
         "intSubnetPrivateAddressSuffix1": "[add(variables('intSubnetPrivateAddressSuffixInt'), 2)]",
         "intSubnetPrivateAddressSuffix2": "[add(variables('intSubnetPrivateAddressSuffixInt'), 3)]",
         "intSubnetPrivateAddressSuffix3": "[add(variables('intSubnetPrivateAddressSuffixInt'), 4)]",
-        "intSubnetPrivateAddressSuffix4": "[add(variables('intSubnetPrivateAddressSuffixInt'), 5)]",
         "numberOfExternalIps": "[parameters('numberOfExternalIps')]",
         "backEndAddressPoolArray": [
             {
@@ -956,7 +960,7 @@
                     {
                         "name": "[concat(variables('dnsLabel'), '-int-ipconfig-float')]",
                         "properties": {
-                            "privateIPAddress": "[variables('intSubnetPrivateAddress4')]",
+                            "privateIPAddress": "[parameters('intSubnetPrivateFloatIPAddress')]",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
                                 "id": "[variables('intSubnetId')]"

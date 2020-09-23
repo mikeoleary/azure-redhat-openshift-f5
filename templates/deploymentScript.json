@@ -56,6 +56,12 @@
                 "description": "URI for script to run"
             }
         },
+        "cfeScriptUri": {
+            "type": "string",
+            "metadata": {
+                "description": "URI for script to run to install CFE"
+            }
+        },
         "baseUrl": {
             "type": "string",
             "metadata": {
@@ -71,7 +77,8 @@
     },
     "variables":{
         "containerGroupName": "[concat(parameters('aroClusterName'), '-containerGroup')]",
-        "primaryScriptUri": "[parameters('primaryScriptUri')]"
+        "cfeDownloadUrlPrefix":"https://github.com/F5Networks/f5-cloud-failover-extension/releases/download/",
+        "cfeVersion":"1.5.0"
         },
     "resources": [
         {
@@ -86,7 +93,7 @@
         {
             "type": "Microsoft.Resources/deploymentScripts",
             "apiVersion": "2019-10-01-preview",
-            "name": "runDeploymentScript",
+            "name": "deploymentScriptDeviceA",
             "dependsOn": [
                 "[guid(resourceGroup().id, deployment().name)]"
             ],
@@ -119,7 +126,55 @@
                     }
                 ],  
                 "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('privateInternalSelfIpAddressFloat'), ' ', parameters('customDomain'))]",
-                "primaryScriptUri": "[variables('primaryScriptUri')]",
+                "primaryScriptUri": "[parameters('primaryScriptUri')]",
+                "supportingScriptUris":[],
+                "timeout": "PT30M",
+                "cleanupPreference": "OnExpiration",
+                "retentionInterval": "P1D"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2019-10-01-preview",
+            "name": "deploymentScriptInstallCFE",
+            "dependsOn": [
+                "[guid(resourceGroup().id, deployment().name)]",
+                "deploymentScriptDeviceA"
+            ],
+            "location": "[resourceGroup().location]",
+            "kind": "AzureCLI", // or  "AzurePowerShell"
+            "identity": {
+                "type": "userAssigned",
+                "userAssignedIdentities": {
+                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedManagedIdentityName'))]": {}
+                }
+            },
+            "properties": {
+                "forceUpdateTag": 1,
+                "containerSettings": {
+                    "containerGroupName": "[variables('containerGroupName')]"
+                },
+                "azCliVersion": "2.9.1",   // or  "azPowerShellVersion": "3.0"
+                "environmentVariables": [
+                    {
+                        "name": "BIGIP_MGMT_ADDRESS",
+                        "secureValue": "[parameters('bigipMgmtAddress')]"
+                    },
+                    {
+                        "name": "BIGIP_MGMT_PASSWORD",
+                        "secureValue": "[parameters('bigIpMgmtPassword')]"
+                    },
+                    {
+                        "name": "CFE_DOWNLOAD_URL_PREFIX",
+                        "value": "[variables('cfeDownloadUrlPrefix')]"
+                    },
+                    {
+                        "name": "CFE_VERSION",
+                        "value": "[variables('cfeVersion')]"
+                    }
+                ],  
+                "arguments": "",
+                "primaryScriptUri": "[parameters('cfeScriptUri')]",
                 "supportingScriptUris":[],
                 "timeout": "PT30M",
                 "cleanupPreference": "OnExpiration",
@@ -130,19 +185,19 @@
     "outputs":{
         "aro_api_server": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_api_server]"
+            "value": "[reference('deploymentScriptDeviceA').outputs.aro_api_server]"
         },
         "aro_console_url": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_console_url]"
+            "value": "[reference('deploymentScriptDeviceA').outputs.aro_console_url]"
         },  
         "aro_username": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_username]"
+            "value": "[reference('deploymentScriptDeviceA').outputs.aro_username]"
         },   
         "aro_password": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_password]"
+            "value": "[reference('deploymentScriptDeviceA').outputs.aro_password]"
         }
     }
 }

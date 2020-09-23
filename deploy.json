@@ -89,14 +89,16 @@
         }
     },
     "variables": {
-        "resourcesUrl": "[concat(parameters('baseUrl'), parameters('branch'), '/templates/')]",
-        "vnetTemplateUri": "[concat(variables('resourcesUrl'), 'vnet.json')]",
-        "f5TemplateUri": "[concat(variables('resourcesUrl'), 'f5.json')]",
-        "updateNetworkTemplateUri": "[concat(variables('resourcesUrl'), 'updateNetwork.json')]",
-        "aroTemplateUri": "[concat(variables('resourcesUrl'), 'aro.json')]",
-        "deploymentScriptTemplateUri": "[concat(variables('resourcesUrl'), 'deploymentScript.json')]",
-        "uamiTemplateUri": "[concat(variables('resourcesUrl'), 'uami.json')]",
-        "primaryScriptUri": "[concat(variables('resourcesUrl'), 'deploymentScriptDeviceA.sh')]",
+        "temlplatesUrl": "[concat(parameters('baseUrl'), parameters('branch'), '/templates/')]",
+        "scriptsUrl": "[concat(parameters('baseUrl'), parameters('branch'), '/scripts/')]",
+        "vnetTemplateUri": "[concat(variables('temlplatesUrl'), 'vnet.json')]",
+        "f5TemplateUri": "[concat(variables('temlplatesUrl'), 'f5.json')]",
+        "updateNetworkTemplateUri": "[concat(variables('temlplatesUrl'), 'updateNetwork.json')]",
+        "aroTemplateUri": "[concat(variables('temlplatesUrl'), 'aro.json')]",
+        "deploymentScriptTemplateUri": "[concat(variables('temlplatesUrl'), 'deploymentScript.json')]",
+        "uamiTemplateUri": "[concat(variables('temlplatesUrl'), 'uami.json')]",
+        "primaryScriptUri": "[concat(variables('scriptsUrl'), 'deploymentScriptDeviceA.sh')]",
+        "cfeScriptUri": "[concat(variables('scriptsUrl'), 'installCFE.sh')]",
         "resourceGroupName": "[resourceGroup().name]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
         "subnet1Name": "Mgmt",
@@ -189,6 +191,9 @@
                                 },
                                 "restrictedSrcAddress": {
                                     "value": "[parameters('restrictedSrcAddress')]"
+                                },
+                                "intSubnetPrivateFloatIPAddress":{
+                                    "value": "[reference('vnetLinkedTemplate').outputs.intSubnetPrivateFloatIPAddress.value]"
                                 }
                             }
                         }
@@ -331,6 +336,9 @@
                                 },
                                 "primaryScriptUri":{
                                     "value": "[variables('primaryScriptUri')]"
+                                },
+                                "cfeScriptUri":{
+                                    "value": "[variables('cfeScriptUri')]"
                                 },
                                 "baseUrl":{
                                     "value": "[parameters('baseUrl')]"

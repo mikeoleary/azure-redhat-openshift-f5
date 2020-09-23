@@ -95,7 +95,10 @@
       }
     },
     "variables": {
-      "AzureRedHatOpenShiftRPObjectId": "1684d4aa-11c7-48e0-88e3-40a035536eb4"
+      "AzureRedHatOpenShiftRPObjectId": "1684d4aa-11c7-48e0-88e3-40a035536eb4",
+      "lastDotIndex":"[lastIndexOf(parameters('subnet3Prefix'), '.')]",
+      "firstThreeOctets": "[substring(parameters('subnet3Prefix'), 0, variables('lastDotIndex'))]",
+      "intSubnetPrivateFloatIPAddress": "[concat(variables('firstThreeOctets'), '10')]"
     },
     "resources": [
       {
@@ -207,6 +210,10 @@
       "extSubnetAddressPrefix": {
           "type": "string",
           "value": "[reference(resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnet2Name')), '2018-03-01').addressPrefix]"
+      },
+      "intSubnetPrivateFloatIPAddress":{
+          "type": "string",
+          "value": "[variables('intSubnetPrivateFloatIPAddress')]"
       }
     }
   }
