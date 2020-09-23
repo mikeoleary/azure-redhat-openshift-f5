@@ -2,6 +2,20 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "baseUrl":{
+            "metadata": {
+                "description": "URL for downloading child templates and resources"
+            },
+            "defaultValue": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/",
+            "type": "string"
+        },
+        "branch":{
+            "metadata": {
+                "description": "Branch for downloading child templates and resources"
+            },
+            "defaultValue": "high-availability",
+            "type": "string"
+        },
         "adminUserName": {
             "metadata": {
                 "description": "User Name for network devices"
@@ -75,11 +89,12 @@
         }
     },
     "variables": {
-        "vnetTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/vnet.json",
-        "f5TemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/f5.json",
-        "aroTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/aro.json",
-        "deploymentScriptTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/deploymentScript.json",
-        "uamiTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/uami.json",
+        "resourcesUrl": "[concat(parameters('baseUrl'), parameters('branch'), '/templates/')]",
+        "vnetTemplateUri": "[concat(variables('resourcesUrl'), 'vnet.json')]",
+        "f5TemplateUri": "[concat(variables('resourcesUrl'), 'f5.json')]",
+        "aroTemplateUri": "[concat(variables('resourcesUrl'), 'aro.json')]",
+        "deploymentScriptTemplateUri": "[concat(variables('resourcesUrl'), 'deploymentScript.json')]",
+        "uamiTemplateUri": "[concat(variables('resourcesUrl'), 'uami.json')]",
         "resourceGroupName": "[resourceGroup().name]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
         "subnet1Name": "Mgmt",
