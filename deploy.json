@@ -197,6 +197,7 @@
                         "apiVersion": "2017-08-01",
                         "name": "updateNetworkLinkedTemplate",
                         "dependsOn":[
+                            "vnetLinkedTemplate",
                             "f5LinkedTemplate"
                         ],
                         "type": "Microsoft.Resources/deployments",
@@ -214,10 +215,10 @@
                                     "value": "[variables('subnet2Name')]"
                                 },
                                 "subnetAddressPrefix": {
-                                    "value": "[reference(resourceId(variables('resourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnet2Name')), '2018-03-01').addressPrefix]"
+                                    "value": "[reference('vnetLinkedTemplate').outputs.extSubnetAddressPrefix.value]"
                                 },
                                 "nsgId": {
-                                    "value": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-ext-nsg'))]"
+                                    "value": "[reference('f5LinkedTemplate').outputs.extNsgId.value]"
                                 }
                             }
                         }

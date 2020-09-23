@@ -202,5 +202,11 @@
           }
         ]
       }
-    ]
+    ],
+    "outputs": {
+      "extSubnetAddressPrefix": {
+          "type": "string",
+          "value": "[reference(resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnet2Name')), '2018-03-01').addressPrefix]"
+      }
+    }
   }

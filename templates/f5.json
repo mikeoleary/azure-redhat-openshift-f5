@@ -1509,6 +1509,10 @@
         "publicExternalLoadBalancerAddress":{
             "type": "string",
             "value": "[reference(concat(variables('extPublicIPAddressNamePrefix'), '0')).IpAddress]"
+        },
+        "extNsgID":{
+            "type": "string",
+            "value": "[variables('extNsgID')]"
         }
     }
 }
