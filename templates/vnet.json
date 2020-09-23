@@ -98,7 +98,7 @@
       "AzureRedHatOpenShiftRPObjectId": "1684d4aa-11c7-48e0-88e3-40a035536eb4",
       "lastDotIndex":"[lastIndexOf(parameters('subnet3Prefix'), '.')]",
       "firstThreeOctets": "[substring(parameters('subnet3Prefix'), 0, variables('lastDotIndex'))]",
-      "intSubnetPrivateFloatIPAddress": "[concat(variables('firstThreeOctets'), '10')]"
+      "intSubnetPrivateFloatIPAddress": "[concat(variables('firstThreeOctets'), '.10')]"
     },
     "resources": [
       {
