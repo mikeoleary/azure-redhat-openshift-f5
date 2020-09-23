@@ -92,6 +92,7 @@
         "resourcesUrl": "[concat(parameters('baseUrl'), parameters('branch'), '/templates/')]",
         "vnetTemplateUri": "[concat(variables('resourcesUrl'), 'vnet.json')]",
         "f5TemplateUri": "[concat(variables('resourcesUrl'), 'f5.json')]",
+        "updateNetworkTemplateUri": "[concat(variables('resourcesUrl'), 'updateNetwork.json')]",
         "aroTemplateUri": "[concat(variables('resourcesUrl'), 'aro.json')]",
         "deploymentScriptTemplateUri": "[concat(variables('resourcesUrl'), 'deploymentScript.json')]",
         "uamiTemplateUri": "[concat(variables('resourcesUrl'), 'uami.json')]",
@@ -187,6 +188,35 @@
                                 },
                                 "restrictedSrcAddress": {
                                     "value": "[parameters('restrictedSrcAddress')]"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "apiVersion": "2017-08-01",
+                        "name": "updateNetworkLinkedTemplate",
+                        "dependsOn":[
+                            "f5LinkedTemplate"
+                        ],
+                        "type": "Microsoft.Resources/deployments",
+                        "properties": {
+                            "mode": "Incremental",
+                            "templateLink": {
+                                "uri": "[variables('updateNetworkTemplateUri')]",
+                                "contentVersion": "1.0.0.0"
+                            },
+                            "parameters": {
+                                "virtualNetworkName": {
+                                    "value": "[variables('vnetName')]"
+                                },
+                                "subnetName": {
+                                    "value": "[variables('subnet2Name')]"
+                                },
+                                "subnetAddressPrefix": {
+                                    "value": "[reference(resourceId(variables('resourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', variables('vnetName'), variables('subnet2Name')), '2018-03-01').addressPrefix]"
+                                },
+                                "nsgId": {
+                                    "value": "[resourceId('Microsoft.Network/networkSecurityGroups/',concat(parameters('dnsLabel'),'-ext-nsg'))]"
                                 }
                             }
                         }

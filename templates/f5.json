@@ -673,8 +673,7 @@
                 "linuxConfiguration": "[variables('linuxConfiguration')]"
             }
         },
-        "installCustomConfig": "[concat(variables('singleQuote'), '#!/bin/bash\n', variables('customConfig'), variables('singleQuote'))]",
-        "updateNetworkTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/updateNetwork.json"
+        "installCustomConfig": "[concat(variables('singleQuote'), '#!/bin/bash\n', variables('customConfig'), variables('singleQuote'))]"
     },
     "resources": [
         {
@@ -1460,33 +1459,7 @@
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "type": "Microsoft.Compute/virtualMachines/extensions"
-        },
-        {
-            "apiVersion": "2017-08-01",
-            "name": "updateNetworkLinkedTemplate",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('updateNetworkTemplateUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                "virtualNetworkName": {
-                    "value": "[parameters('vnetName')]"
-                },
-                "subnetName": {
-                    "value": "[variables('extSubnetName')]"
-                },
-                "subnetAddressPrefix": {
-                    "value": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), variables('extSubnetName')), '2018-03-01').addressPrefix]"
-                },
-                "nsgId": {
-                    "value": "[variables('extNsgID')]"
-                }
-                }
-            }
-            }
+        }
     ],
     "outputs": {
         "guiUrlDevice0": {
