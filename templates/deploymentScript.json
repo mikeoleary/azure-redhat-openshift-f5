@@ -55,6 +55,18 @@
             "metadata": {
                 "description": "URI for script to run"
             }
+        },
+        "baseUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "BASE_URL env variable for script"
+            }
+        },
+        "branch": {
+            "type": "string",
+            "metadata": {
+                "description": "BRANCH env variable for script"
+            }
         }
     },
     "variables":{
@@ -96,6 +108,14 @@
                     {
                         "name": "BIGIP_MGMT_PASSWORD",
                         "secureValue": "[parameters('bigIpMgmtPassword')]"
+                    },
+                    {
+                        "name": "BASE_URL",
+                        "value": "[parameters('baseUrl')]"
+                    },
+                    {
+                        "name": "BRANCH",
+                        "value": "[parameters('branch')]"
                     }
                 ],  
                 "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('privateInternalSelfIpAddressFloat'), ' ', parameters('customDomain'))]",

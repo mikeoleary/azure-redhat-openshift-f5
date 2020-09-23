@@ -24,7 +24,8 @@ MASTER_SUBNET_IP_CIDR=$(echo $ARO_SUBNET_IDS_ARRAY  | jq '.[]  | select(.id == "
 WORKER_SUBNET_IP_CIDR=$(echo $ARO_SUBNET_IDS_ARRAY  | jq '.[]  | select(.id == "'"$ARO_WORKER_SUBNET_ID"'") | .addressPrefix' -r)
 
 ##Download OC client tool
-wget https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/client/openshift-client-linux.tar.gz -O /tmp/openshift-client-linux.tar.gz
+OC_DOWNLOAD_URL=$BASE_URL$BRANCH/"client/openshift-client-linux.tar.gz"
+wget $OC_DOWNLOAD_URL -O /tmp/openshift-client-linux.tar.gz
 tar -xf /tmp/openshift-client-linux.tar.gz -C /tmp
 mv /tmp/oc /usr/local/bin -f
 mv /tmp/kubectl /usr/local/bin -f
@@ -45,7 +46,8 @@ read -a strarr <<< $(echo $BIGIP_MGMT_PRIVATE_IP_WITH_MASK | tr "/" " ")
 BIGIP_MGMT_PRIVATE_IP=${strarr[0]}
 
 ##Download and edit yaml file template for hostsubnet, then apply new hostsubnet
-wget https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/f5-bigip-node.yaml  -O /tmp/f5-bigip-node.yaml
+HOST_SUBNET_DOWNLOAD_URL=$BASE_URL$BRANCH/"templates/f5-bigip-node.yaml"
+wget $HOST_SUBNET_DOWNLOAD_URL -O /tmp/f5-bigip-node.yaml
 cp /tmp/f5-bigip-node.yaml /tmp/f5-bigip-node-float.yaml
 sed -i -e "s/<INTERNALSELFIP>/$BIGIP_INT_SELFIP/" /tmp/f5-bigip-node.yaml
 sed -i -e "s/<NODENAME>/f5-bigip-node01/" /tmp/f5-bigip-node.yaml
@@ -83,13 +85,15 @@ curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASS
 
 ##Deploy demoapp
 rm /tmp/demoapp.yaml -f
-wget https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/demoapp/demoapp.yaml -O /tmp/demoapp.yaml
+DEMO_APP_DOWNLOAD_URL=$BASE_URL$BRANCH/"demoapp/demoapp.yaml"
+wget $DEMO_APP_DOWNLOAD_URL -O /tmp/demoapp.yaml
 sed -i -e "s/<my_custom_domain>/$MY_CUSTOM_DOMAIN/" /tmp/demoapp.yaml
 oc apply -f /tmp/demoapp.yaml
 
 ##Deploy F5 CIS
 rm /tmp/cis.yaml -f
-wget https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/cis/cis.yaml -O /tmp/cis.yaml
+CIS_YAML_DOWNLOAD_URL=$BASE_URL$BRANCH/"cis/cis.yaml"
+wget $CIS_YAML_DOWNLOAD_URL -O /tmp/cis.yaml
 BIGIP_MGMT_PASSWORD_BASE64=$(echo -n  $BIGIP_MGMT_PASSWORD | base64)
 sed -i -e "s/<base64password>/$BIGIP_MGMT_PASSWORD_BASE64/" /tmp/cis.yaml
 sed -i -e "s/<bigipUrl>/$BIGIP_MGMT_PRIVATE_IP/" /tmp/cis.yaml
