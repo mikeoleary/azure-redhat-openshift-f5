@@ -957,7 +957,7 @@
                     {
                         "name": "[concat(variables('dnsLabel'), '-int-ipconfig-float')]",
                         "properties": {
-                            "privateIPAddress": "[if(equals(parameters('internalIpAddressRangeStart'), 'DYNAMIC'), json('null'), variables('intSubnetPrivateAddress4'))]",
+                            "privateIPAddress": "[variables('intSubnetPrivateAddress4')]",
                             "privateIPAllocationMethod": "Static",
                             "subnet": {
                                 "id": "[variables('intSubnetId')]"
