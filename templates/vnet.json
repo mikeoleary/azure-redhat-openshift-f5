@@ -92,13 +92,20 @@
         "metadata": {
           "description": "Location for all resources."
         }
+      },
+      "storageAccountName":{
+        "type": "string",
+        "metadata": {
+          "description": "Unique name for storage account"
+        }
       }
     },
     "variables": {
       "AzureRedHatOpenShiftRPObjectId": "1684d4aa-11c7-48e0-88e3-40a035536eb4",
       "lastDotIndex":"[lastIndexOf(parameters('subnet3Prefix'), '.')]",
       "firstThreeOctets": "[substring(parameters('subnet3Prefix'), 0, variables('lastDotIndex'))]",
-      "intSubnetPrivateFloatIPAddress": "[concat(variables('firstThreeOctets'), '.10')]"
+      "intSubnetPrivateFloatIPAddress": "[concat(variables('firstThreeOctets'), '.10')]",
+      "storageAccountType": "Standard_LRS"
     },
     "resources": [
       {
@@ -204,7 +211,21 @@
             }
           }
         ]
-      }
+      },
+      {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-04-01",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[variables('storageAccountType')]"
+      },
+      "tags": {
+        "f5_cloud_failover_label":"mydeployment"
+      },
+      "kind": "StorageV2",
+      "properties": {}
+    }
     ],
     "outputs": {
       "extSubnetAddressPrefix": {
@@ -214,6 +235,10 @@
       "intSubnetPrivateFloatIPAddress":{
           "type": "string",
           "value": "[variables('intSubnetPrivateFloatIPAddress')]"
+      },
+      "storageAccountName":{
+          "type": "string",
+          "value": "[parameters('storageAccountName')]"
       }
     }
   }

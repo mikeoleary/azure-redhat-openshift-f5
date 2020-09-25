@@ -110,6 +110,7 @@
         "uniqueStringForDnsZone": "[concat('ocp', variables('uniqueString'))]",
         "domain": "[if(equals(parameters('domain'), 'GENERATE_UNIQUE_DOMAIN_NAME'), variables('uniqueStringForDnsZone'), parameters('domain'))]",
         "readOnlyResourceGroupName": "[concat('aro-', variables('uniqueString'))]",
+        "storageAccountName": "[concat('sa', variables('uniqueString'))]",
         "uamiName": "[concat('uami-', variables('uniqueString'))]"
     },
     "resources": [
@@ -141,6 +142,9 @@
                                 },
                                 "subnet5Name": {
                                     "value": "[variables('subnet5Name')]"
+                                },
+                                "storageAccountName":{
+                                    "value": "[variables('storageAccountName')]"
                                 }
                             }
                         }
