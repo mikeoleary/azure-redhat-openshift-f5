@@ -171,6 +171,14 @@
                     {
                         "name": "CFE_VERSION",
                         "value": "[variables('cfeVersion')]"
+                    },
+                    {
+                        "name": "BASE_URL",
+                        "value": "[parameters('baseUrl')]"
+                    },
+                    {
+                        "name": "BRANCH",
+                        "value": "[parameters('branch')]"
                     }
                 ],  
                 "arguments": "",

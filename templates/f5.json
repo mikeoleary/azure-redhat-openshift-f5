@@ -1359,7 +1359,10 @@
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "zones": "[if(variables('zonesAvailable'), array(1), json('null'))]",
-            "type": "Microsoft.Compute/virtualMachines"
+            "type": "Microsoft.Compute/virtualMachines",
+            "identity": {
+                "type": "SystemAssigned"
+            }
         },
         {
             "apiVersion": "[variables('computeApiVersion')]",
@@ -1412,7 +1415,10 @@
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "zones": "[if(variables('zonesAvailable'), array(2), json('null'))]",
-            "type": "Microsoft.Compute/virtualMachines"
+            "type": "Microsoft.Compute/virtualMachines",
+            "identity": {
+                "type": "SystemAssigned"
+            }
         },
         {
             "apiVersion": "[variables('computeApiVersion')]",
@@ -1463,6 +1469,32 @@
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "type": "Microsoft.Compute/virtualMachines/extensions"
+        },
+        {
+            "apiVersion": "2020-04-01-preview",
+            "type": "Microsoft.Authorization/roleAssignments",
+            "name": "[guid(concat(variables('dnsLabel'), '-', variables('instanceName'), '0-role'))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '0'), variables('computeApiVersion'), 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '0')]"
+            ]
+        },
+        {
+            "apiVersion": "2020-04-01-preview",
+            "type": "Microsoft.Authorization/roleAssignments",
+            "name": "[guid(concat(variables('dnsLabel'), '-', variables('instanceName'), '1-role'))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '1'), variables('computeApiVersion'), 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '1')]"
+            ]
         }
     ],
     "outputs": {
