@@ -841,6 +841,7 @@
             "location": "[variables('location')]",
             "name": "[concat(variables('extNicName'), '0')]",
             "properties": {
+                "enableIPForwarding": true,
                 "ipConfigurations": [
                     {
                         "name": "[concat(variables('instanceName'), '-self-ipconfig')]",
@@ -889,6 +890,7 @@
             "location": "[variables('location')]",
             "name": "[concat(variables('extNicName'), '1')]",
             "properties": {
+                "enableIPForwarding": true,
                 "ipConfigurations": [
                     {
                         "name": "[concat(variables('instanceName'), '-self-ipconfig')]",
