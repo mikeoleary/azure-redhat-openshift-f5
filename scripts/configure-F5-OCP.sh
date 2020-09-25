@@ -111,10 +111,12 @@ BIGIP_TUNNEL_SELFIP1="${BIGIP_HOST_SUBNET1%.*}.100/$CLUSTERNETWORK_MASK"
 
 
 ###Connect to BIG-IP and create tunnel profile, tunnel, selfIP on tunnel, and add vxlan port 4789 to internal self IP.
-#Create multipoint vxlan profile
+#Create multipoint vxlan profile on both devices
 curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS0/mgmt/tm/net/tunnels/vxlan -d '{"name": "vxlan-mp", "floodingType": "multipoint" }'
-#Create vxlan tunnel based on vxlan profile
+curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS1/mgmt/tm/net/tunnels/vxlan -d '{"name": "vxlan-mp", "floodingType": "multipoint" }'
+#Create vxlan tunnel based on vxlan profile on both devices
 curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS0/mgmt/tm/net/tunnels/tunnel -d '{"name": "openshift_vxlan", "key": "0", "profile": "vxlan-mp", "localAddress": "'"$BIGIP_INT_FLOAT_IP"'", "secondary-address": "'"$BIGIP_INT_SELFIP"'", "traffic-group":"traffic-group-1" }'
+curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS1/mgmt/tm/net/tunnels/tunnel -d '{"name": "openshift_vxlan", "key": "0", "profile": "vxlan-mp", "localAddress": "'"$BIGIP_INT_FLOAT_IP"'", "secondary-address": "'"$BIGIP_INT_SELFIP1"'", "traffic-group":"traffic-group-1" }'
 #Create localonly selfIP and a floating selfIP on tunnel
 curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS0/mgmt/tm/net/self -d '{"name": "tunnelSelfIP", "address": "'"$BIGIP_TUNNEL_SELFIP"'", "vlan": "openshift_vxlan", "allowService": "all" }'
 curl -s -k -X POST -H "Content-Type: application/json" -u admin:$BIGIP_MGMT_PASSWORD https://$BIGIP_MGMT_ADDRESS1/mgmt/tm/net/self -d '{"name": "tunnelSelfIP", "address": "'"$BIGIP_TUNNEL_SELFIP1"'", "vlan": "openshift_vxlan", "allowService": "all" }'

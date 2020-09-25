@@ -120,7 +120,7 @@
                 "environmentVariables": [
                     {
                         "name": "ARO_CLUSTER_NAME",
-                        "secureValue": "[parameters('aroClusterName')]"
+                        "value": "[parameters('aroClusterName')]"
                     },
                     {
                         "name": "ARO_CLUSTER_RESOURCE_GROUP",
@@ -136,7 +136,7 @@
                     },
                     {
                         "name": "BIGIP_VSERVER_ADDR",
-                        "secureValue": "[parameters('privateExternalVirtualIpAddress0')]"
+                        "value": "[parameters('privateExternalVirtualIpAddress0')]"
                     },
                     {
                         "name": "BIGIP_INT_FLOAT_IP",
