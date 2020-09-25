@@ -872,7 +872,10 @@
                     "id": "[concat(variables('extNsgID'))]"
                 }
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"external"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
@@ -917,7 +920,10 @@
                     "id": "[concat(variables('extNsgID'))]"
                 }
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"external"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
@@ -969,7 +975,10 @@
                     }
                 ]
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"internal"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
@@ -1011,7 +1020,10 @@
                     }
                 ]
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"internal"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
