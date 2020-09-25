@@ -27,7 +27,7 @@ uploadCFE () {
 }
 installCFE () {
     DATA="{\"operation\":\"INSTALL\",\"packageFilePath\":\"/var/config/rest/downloads/$FN\"}"
-    curl -kvu $CREDS "https://$1/mgmt/shared/iapp/package-management-tasks" -H "Origin: https://$BIGIP_MGMT_ADDRESS" -H 'Content-Type: application/json;charset=UTF-8' --data $DATA
+    curl -kvu $CREDS "https://$1/mgmt/shared/iapp/package-management-tasks" -H "Origin: https://$1" -H 'Content-Type: application/json;charset=UTF-8' --data $DATA
 }
 configureCFE() {
     BIGIP_MGMT_PRIVATE_IP_WITH_MASK=$(curl -s -k -H "Content-Type: application/json" -u $CREDS https://$i/mgmt/tm/sys/management-ip | jq .items[0].fullPath -r)

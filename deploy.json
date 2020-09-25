@@ -97,7 +97,7 @@
         "aroTemplateUri": "[concat(variables('temlplatesUrl'), 'aro.json')]",
         "deploymentScriptTemplateUri": "[concat(variables('temlplatesUrl'), 'deploymentScript.json')]",
         "uamiTemplateUri": "[concat(variables('temlplatesUrl'), 'uami.json')]",
-        "primaryScriptUri": "[concat(variables('scriptsUrl'), 'deploymentScriptDeviceA.sh')]",
+        "primaryScriptUri": "[concat(variables('scriptsUrl'), 'configure-F5-OCP.sh')]",
         "cfeScriptUri": "[concat(variables('scriptsUrl'), 'installCFE.sh')]",
         "resourceGroupName": "[resourceGroup().name]",
         "vnetName": "[concat(variables('resourceGroupName'), '-vnet')]",
@@ -323,8 +323,11 @@
                                 "aroClusterName": {
                                     "value": "[parameters('openShiftClusterName')]"
                                 },
-                                "bigipMgmtAddress": {
+                                "bigipMgmtAddress0": {
                                     "value": "[reference('f5LinkedTemplate').outputs.publicMgmtAddress0.value]"
+                                },
+                                "bigipMgmtAddress1": {
+                                    "value": "[reference('f5LinkedTemplate').outputs.publicMgmtAddress1.value]"
                                 },
                                 "bigIpMgmtPassword": {
                                     "value": "[parameters('bigipVmPassword')]"
