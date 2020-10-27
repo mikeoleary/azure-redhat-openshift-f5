@@ -23,7 +23,7 @@
     },
     "variables":{
         "containerGroupName": "[concat('objIdLookup', '-containerGroup')]",
-        "AzureRedHatOpenShiftRPAppId": "1684d4aa-11c7-48e0-88e3-40a035536eb4"
+        "AzureRedHatOpenShiftRPAppId": "f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875"
         },
     "resources": [
         {
