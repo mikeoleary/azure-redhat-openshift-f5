@@ -3,7 +3,7 @@
 ## Pre-requisites
 1. **You will need a Service Principal (SP) in AzureAD with a secret. This SP will require Contributor permissions on the Resource Group into which you deploy.** In practice, this means either create a Resource Group prior to deploying into it, and give a SP Contributor rights, or, use a SP with Contributor rights over the subscription.
 
-2. If not already registered, **you will need to register the resource providers** for Microsoft.RedHatOpenShift and Microsoft.ContainerInstance. This only needs to be done once per subscription but must be done by a user with **User Access Administrator privileges**. You can do this by one of the following methods:  
+2. If not already registered, **you will need to register the following resource providers** . This only needs to be done once per subscription. You can do this by one of the following methods:  
  a) **Azure Portal.** You can follow [these instructions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-portal) to register a Resource provider in your subscription. I've provided a [screenshot](images/register-resource-provider.PNG) to show what this looks like also.  
  b) **Azure PowerShell** Instructions for [Azure PowerShell](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-powershell).  
  c) **Azure CLI** Instructions for [Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-cli).  
