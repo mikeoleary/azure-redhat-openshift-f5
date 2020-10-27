@@ -27,13 +27,6 @@
                 "description": "DNS domain of your cluster. Must be globally unique and resolvable in DNS."
             }
         },
-        "version": {
-            "type": "string",
-            "defaultValue": "4.4.17",
-            "metadata": {
-                "description": "OpenShift cluster version"
-            }
-        },
         "readOnlyResourceGroupName": {
             "type": "string",
             "metadata": {
@@ -69,7 +62,6 @@
             "properties": {
                 "clusterProfile": {
                     "domain": "[parameters('domain')]",
-                    "version": "[parameters('version')]",
                     "resourceGroupId": "[variables('readOnlyResourceGroupId')]"
                 },
                 "consoleProfile": {},

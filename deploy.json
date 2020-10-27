@@ -59,16 +59,6 @@
             "defaultValue": "GENERATE_UNIQUE_DOMAIN_NAME",
             "type": "string"
         },
-        "openShiftVersion":{
-            "type": "string",
-            "defaultValue": "4.4.17",
-            "allowedValues": [
-                "4.4.17"
-            ],
-            "metadata": {
-                "description": "OpenShift Cluster Version"
-            }
-        },
         "servicePrincipalClientId": {
             "type": "string",
             "metadata":{
@@ -263,9 +253,6 @@
                                 },
                                 "domain": {
                                     "value": "[variables('domain')]"
-                                },
-                                "version": {
-                                    "value": "[parameters('openShiftVersion')]"
                                 },
                                 "readOnlyResourceGroupName": {
                                     "value": "[variables('readOnlyResourceGroupName')]"
