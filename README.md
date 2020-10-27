@@ -19,7 +19,7 @@ Azure CLI:
   az provider register --namespace 'Microsoft.Storage'
   ```
 
-3. You will need the **Object Id of the ARO Resource Provider** in your directory. Get this by running Azure PowerShell or CLI, or finding this from the Azure portal by navigating to Azure Active Directory > Enterprise Applications > and searching for Microsoft Applications. Again I've provided a [screenshot](images/ARO-RP.PNG).
+3. You will need the **Object Id of the ARO Resource Provider** in your directory. Get this from the Azure portal ([screenshot](images/ARO-RP.PNG)) or by running:
 
 PowerShell:  
   ```powershell
