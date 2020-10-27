@@ -13,7 +13,7 @@
             "metadata": {
                 "description": "Branch for downloading child templates and resources"
             },
-            "defaultValue": "high-availability",
+            "defaultValue": "main",
             "type": "string"
         },
         "adminUserName": {
