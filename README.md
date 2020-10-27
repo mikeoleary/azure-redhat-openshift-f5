@@ -3,7 +3,7 @@
 ## Pre-requisites
 1. **You will need a Service Principal (SP) in AzureAD with a secret. This SP will require Contributor permissions on the Resource Group into which you deploy.** In practice, this means either create a Resource Group prior to deploying into it, and give a SP Contributor rights, or, use a SP with Contributor rights over the subscription.
 
-2. **You will need to register the ARO Resource Provider for your subscription.** This only needs to be done once per subscription but must be done by a user with **User Access Administrator privileges**. You can do this by one of the following methods:  
+2. If not already registered, **you will need to register the resource providers** for Microsoft.RedHatOpenShift and Microsoft.ContainerInstance. This only needs to be done once per subscription but must be done by a user with **User Access Administrator privileges**. You can do this by one of the following methods:  
  a) **Azure Portal.** You can follow [these instructions](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-portal) to register a Resource provider in your subscription. I've provided a [screenshot](images/register-resource-provider.PNG) to show what this looks like also.  
  b) **Azure PowerShell** Instructions for [Azure PowerShell](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-powershell).  
  c) **Azure CLI** Instructions for [Azure CLI](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-providers-and-types#azure-cli).  
@@ -12,13 +12,34 @@ PowerShell:
   ```powershell
   #Using the new Azure PowerShell Az module
   Register-AzResourceProvider -ProviderNamespace Microsoft.RedHatOpenShift
- 
+  Register-AzResourceProvider -ProviderNamespace Microsoft.ContainerInstance
+  Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
+
   #Or, using the older AzureRM module
   Register-AzureRmResourceProvider -ProviderNamespace Microsoft.RedHatOpenShift
+  Register-AzureRmResourceProvider -ProviderNamespace Microsoft.ContainerInstance
+  Register-AzureRmResourceProvider -ProviderNamespace Microsoft.Storage
   ``` 
 Azure CLI:  
   ```bash
   az provider register --namespace 'Microsoft.RedHatOpenShift'
+  az provider register --namespace 'Microsoft.ContainerInstance'
+  az provider register --namespace 'Microsoft.Storage'
+  ```
+
+3. You will need the **Object Id of the ARO Resource Provider** in your directory. Get this by running Azure PowerShell or CLI, or finding this from the Azure portal by navigating to Azure Active Directory > Enterprise Applications > and searching for Microsoft Applications. Again I've provided a [screenshot](images/ARO-RP.PNG).
+
+PowerShell:  
+  ```powershell
+  #Using the new Azure PowerShell Az module
+  Get-AzureADServicePrincipal -ApplicationId 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875'
+
+  #Or, using the older AzureRM module
+  Get-AzureRmADServicePrincipal -ApplicationId 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875'
+  ``` 
+Azure CLI:  
+  ```bash
+  az ad sp list --filter "(appId eq 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875')"
   ```
 
 ## Instructions
