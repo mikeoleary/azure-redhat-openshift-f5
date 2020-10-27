@@ -98,10 +98,15 @@
         "metadata": {
           "description": "Unique name for storage account"
         }
+      },
+      "aro_rp_obj_id": {
+        "type": "string",
+        "metadata": {
+          "description": "Object Id of ARO Resource Provider in this tenant"
+        }        
       }
     },
     "variables": {
-      "AzureRedHatOpenShiftRPObjectId": "1684d4aa-11c7-48e0-88e3-40a035536eb4",
       "lastDotIndex":"[lastIndexOf(parameters('subnet3Prefix'), '.')]",
       "firstThreeOctets": "[substring(parameters('subnet3Prefix'), 0, variables('lastDotIndex'))]",
       "intSubnetPrivateFloatIPAddress": "[concat(variables('firstThreeOctets'), '.10')]",
@@ -117,7 +122,7 @@
           ],  
           "properties": {
               "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
-              "principalId": "[variables('AzureRedHatOpenShiftRPObjectId')]",
+              "principalId": "[parameters('aro_rp_obj_id')]",
               "scope": "[resourceGroup().id]"
           }
       },
