@@ -14,11 +14,6 @@ PowerShell:
   Register-AzResourceProvider -ProviderNamespace Microsoft.RedHatOpenShift
   Register-AzResourceProvider -ProviderNamespace Microsoft.ContainerInstance
   Register-AzResourceProvider -ProviderNamespace Microsoft.Storage
-
-  #Or, using the older AzureRM module
-  Register-AzureRmResourceProvider -ProviderNamespace Microsoft.RedHatOpenShift
-  Register-AzureRmResourceProvider -ProviderNamespace Microsoft.ContainerInstance
-  Register-AzureRmResourceProvider -ProviderNamespace Microsoft.Storage
   ``` 
 Azure CLI:  
   ```bash
@@ -33,9 +28,6 @@ PowerShell:
   ```powershell
   #Using the new Azure PowerShell Az module
   Get-AzureADServicePrincipal -ApplicationId 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875'
-
-  #Or, using the older AzureRM module
-  Get-AzureRmADServicePrincipal -ApplicationId 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875'
   ``` 
 Azure CLI:  
   ```bash
