@@ -20,7 +20,13 @@
                 "description": "Name of ARO cluster"
             }
         },
-        "bigipMgmtAddress": {
+        "bigipMgmtAddress0": {
+            "type": "string",
+            "metadata": {
+                "description": "Public IP or DNS address of BIG-IP"
+            }
+        },
+        "bigipMgmtAddress1": {
             "type": "string",
             "metadata": {
                 "description": "Public IP or DNS address of BIG-IP"
@@ -38,16 +44,47 @@
                 "description": "Private IP of VIP on BIG-IP for route-vserver-addr"
             }
         },
+        "privateInternalSelfIpAddressFloat": {
+            "type": "string",
+            "metadata": {
+                "description": "Internal Float IP of BIG-IP"
+            }
+        },
         "customDomain": {
             "type": "string",
             "metadata": {
                 "description": "Custom Domain Name. Point this domain to the IP address that is output by this deployment."
             }
+        },
+        "primaryScriptUri": {
+            "type": "string",
+            "metadata": {
+                "description": "URI for script to run to configure F5"
+            }
+        },
+        "cfeScriptUri": {
+            "type": "string",
+            "metadata": {
+                "description": "URI for script to run to install CFE"
+            }
+        },
+        "baseUrl": {
+            "type": "string",
+            "metadata": {
+                "description": "BASE_URL env variable for script"
+            }
+        },
+        "branch": {
+            "type": "string",
+            "metadata": {
+                "description": "BRANCH env variable for script"
+            }
         }
     },
     "variables":{
         "containerGroupName": "[concat(parameters('aroClusterName'), '-containerGroup')]",
-        "primaryScriptUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/deploymentScript.sh"
+        "cfeDownloadUrlPrefix":"https://github.com/F5Networks/f5-cloud-failover-extension/releases/download/",
+        "cfeVersion":"1.5.0"
         },
     "resources": [
         {
@@ -62,7 +99,7 @@
         {
             "type": "Microsoft.Resources/deploymentScripts",
             "apiVersion": "2019-10-01-preview",
-            "name": "runDeploymentScript",
+            "name": "deploymentScriptConfigureF5",
             "dependsOn": [
                 "[guid(resourceGroup().id, deployment().name)]"
             ],
@@ -82,12 +119,104 @@
                 "azCliVersion": "2.9.1",   // or  "azPowerShellVersion": "3.0"
                 "environmentVariables": [
                     {
+                        "name": "ARO_CLUSTER_NAME",
+                        "value": "[parameters('aroClusterName')]"
+                    },
+                    {
+                        "name": "ARO_CLUSTER_RESOURCE_GROUP",
+                        "value": "[resourceGroup().name]"
+                    },
+                    {
+                        "name": "BIGIP_MGMT_ADDRESS0",
+                        "value": "[parameters('bigipMgmtAddress0')]"
+                    },
+                    {
+                        "name": "BIGIP_MGMT_ADDRESS1",
+                        "value": "[parameters('bigipMgmtAddress1')]"
+                    },
+                    {
+                        "name": "BIGIP_VSERVER_ADDR",
+                        "value": "[parameters('privateExternalVirtualIpAddress0')]"
+                    },
+                    {
+                        "name": "BIGIP_INT_FLOAT_IP",
+                        "value": "[parameters('privateInternalSelfIpAddressFloat')]"
+                    },
+                    {
+                        "name": "MY_CUSTOM_DOMAIN",
+                        "value": "[parameters('customDomain')]"
+                    },
+                    {
                         "name": "BIGIP_MGMT_PASSWORD",
                         "secureValue": "[parameters('bigIpMgmtPassword')]"
+                    },
+                    {
+                        "name": "BASE_URL",
+                        "value": "[parameters('baseUrl')]"
+                    },
+                    {
+                        "name": "BRANCH",
+                        "value": "[parameters('branch')]"
                     }
                 ],  
-                "arguments": "[concat(parameters('aroClusterName'), ' ', resourceGroup().name, ' ', parameters('bigipMgmtAddress'), ' ', parameters('privateExternalVirtualIpAddress0'), ' ', parameters('customDomain'))]",
-                "primaryScriptUri": "[variables('primaryScriptUri')]",
+                "arguments": "",
+                "primaryScriptUri": "[parameters('primaryScriptUri')]",
+                "supportingScriptUris":[],
+                "timeout": "PT30M",
+                "cleanupPreference": "OnExpiration",
+                "retentionInterval": "P1D"
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2019-10-01-preview",
+            "name": "deploymentScriptInstallCFE",
+            "dependsOn": [
+                "[guid(resourceGroup().id, deployment().name)]",
+                "deploymentScriptConfigureF5"
+            ],
+            "location": "[resourceGroup().location]",
+            "kind": "AzureCLI", // or  "AzurePowerShell"
+            "identity": {
+                "type": "userAssigned",
+                "userAssignedIdentities": {
+                    "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedManagedIdentityName'))]": {}
+                }
+            },
+            "properties": {
+                "forceUpdateTag": 1,
+                "containerSettings": {
+                    "containerGroupName": "[variables('containerGroupName')]"
+                },
+                "azCliVersion": "2.9.1",   // or  "azPowerShellVersion": "3.0"
+                "environmentVariables": [
+                    {
+                        "name": "BIGIP_MGMT_ADDRESS",
+                        "value": "[concat(parameters('bigipMgmtAddress0'), ' ', parameters('bigipMgmtAddress1'))]"
+                    },
+                    {
+                        "name": "BIGIP_MGMT_PASSWORD",
+                        "secureValue": "[parameters('bigIpMgmtPassword')]"
+                    },
+                    {
+                        "name": "CFE_DOWNLOAD_URL_PREFIX",
+                        "value": "[variables('cfeDownloadUrlPrefix')]"
+                    },
+                    {
+                        "name": "CFE_VERSION",
+                        "value": "[variables('cfeVersion')]"
+                    },
+                    {
+                        "name": "BASE_URL",
+                        "value": "[parameters('baseUrl')]"
+                    },
+                    {
+                        "name": "BRANCH",
+                        "value": "[parameters('branch')]"
+                    }
+                ],  
+                "arguments": "",
+                "primaryScriptUri": "[parameters('cfeScriptUri')]",
                 "supportingScriptUris":[],
                 "timeout": "PT30M",
                 "cleanupPreference": "OnExpiration",
@@ -98,19 +227,19 @@
     "outputs":{
         "aro_api_server": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_api_server]"
+            "value": "[reference('deploymentScriptConfigureF5').outputs.aro_api_server]"
         },
         "aro_console_url": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_console_url]"
+            "value": "[reference('deploymentScriptConfigureF5').outputs.aro_console_url]"
         },  
         "aro_username": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_username]"
+            "value": "[reference('deploymentScriptConfigureF5').outputs.aro_username]"
         },   
         "aro_password": {
             "type": "string",
-            "value": "[reference('runDeploymentScript').outputs.aro_password]"
+            "value": "[reference('deploymentScriptConfigureF5').outputs.aro_password]"
         }
     }
 }

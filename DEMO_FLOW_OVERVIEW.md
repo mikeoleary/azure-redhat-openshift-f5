@@ -6,7 +6,7 @@ This information is intended for network engineers seeking to understand this de
 ### Nested deployment templates
 This demo deploys an Azure RedHat OpenShift cluster with F5 integrated in the following steps:
 
-1. Deploys a parent template that simply deploys 5 child templates. 1 of these templates is [f5.json](templates/f5.json) and this has 1 child template of it's own. So there are 6 child templates in all, and these are listed in the order they are deployed, below.
+1. Deploys a parent template that simply deploys 6 child templates, most with dependencies so that they are ordered correctly. These are listed in the order they are deployed below.
 
 2. Deploys a template called [vnet.json](templates/vnet.json). This template is not dependent on any other template to complete. The VNET has 5 subnets, 2 of which will be used for the OpenShift cluster, and 3 for the F5 VM's. The 2 that are used for OpenShift must have a service endpoint for the Microsoft Container Registry, and must have privateLinkServiceNetworkPolicies set to disabled. You will notice this in the template called vnet.json for those 2 subnets:
 ````

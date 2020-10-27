@@ -347,7 +347,13 @@
                 "description": "This deployment can provide F5 with high-level device use information to optimize development resources. If you select **No** the information is not sent."
             },
             "type": "string"
-        }
+        },
+        "intSubnetPrivateFloatIPAddress": {
+            "metadata": {
+                "description": "Because we want a Static IP on internal NIC for Float address, so that CFE can move it, we will pass this IP address in as a parameter input."
+            },
+            "type": "string"
+        } 
     },
     "variables": {
         "computeApiVersion": "2017-12-01",
@@ -671,8 +677,7 @@
                 "linuxConfiguration": "[variables('linuxConfiguration')]"
             }
         },
-        "installCustomConfig": "[concat(variables('singleQuote'), '#!/bin/bash\n', variables('customConfig'), variables('singleQuote'))]",
-        "updateNetworkTemplateUri": "https://raw.githubusercontent.com/mikeoleary/azure-redhat-openshift-f5/main/templates/updateNetwork.json"
+        "installCustomConfig": "[concat(variables('singleQuote'), '#!/bin/bash\n', variables('customConfig'), variables('singleQuote'))]"
     },
     "resources": [
         {
@@ -836,6 +841,7 @@
             "location": "[variables('location')]",
             "name": "[concat(variables('extNicName'), '0')]",
             "properties": {
+                "enableIPForwarding": true,
                 "ipConfigurations": [
                     {
                         "name": "[concat(variables('instanceName'), '-self-ipconfig')]",
@@ -867,7 +873,10 @@
                     "id": "[concat(variables('extNsgID'))]"
                 }
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"external"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
@@ -881,6 +890,7 @@
             "location": "[variables('location')]",
             "name": "[concat(variables('extNicName'), '1')]",
             "properties": {
+                "enableIPForwarding": true,
                 "ipConfigurations": [
                     {
                         "name": "[concat(variables('instanceName'), '-self-ipconfig')]",
@@ -912,7 +922,10 @@
                     "id": "[concat(variables('extNsgID'))]"
                 }
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"external"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
@@ -951,10 +964,23 @@
                                 "id": "[variables('intSubnetId')]"
                             }
                         }
+                    },
+                    {
+                        "name": "[concat(variables('dnsLabel'), '-int-ipconfig-float')]",
+                        "properties": {
+                            "privateIPAddress": "[parameters('intSubnetPrivateFloatIPAddress')]",
+                            "privateIPAllocationMethod": "Static",
+                            "subnet": {
+                                "id": "[variables('intSubnetId')]"
+                            }
+                        }
                     }
                 ]
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"internal"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
@@ -996,7 +1022,10 @@
                     }
                 ]
             },
-            "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
+            "tags": {
+                "f5_cloud_failover_label":"mydeployment",
+                "f5_cloud_failover_nic_map":"internal"
+            },
             "type": "Microsoft.Network/networkInterfaces"
         },
         {
@@ -1344,7 +1373,10 @@
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "zones": "[if(variables('zonesAvailable'), array(1), json('null'))]",
-            "type": "Microsoft.Compute/virtualMachines"
+            "type": "Microsoft.Compute/virtualMachines",
+            "identity": {
+                "type": "SystemAssigned"
+            }
         },
         {
             "apiVersion": "[variables('computeApiVersion')]",
@@ -1397,7 +1429,10 @@
             },
             "tags": "[if(empty(variables('tagValues')), json('null'), variables('tagValues'))]",
             "zones": "[if(variables('zonesAvailable'), array(2), json('null'))]",
-            "type": "Microsoft.Compute/virtualMachines"
+            "type": "Microsoft.Compute/virtualMachines",
+            "identity": {
+                "type": "SystemAssigned"
+            }
         },
         {
             "apiVersion": "[variables('computeApiVersion')]",
@@ -1450,31 +1485,31 @@
             "type": "Microsoft.Compute/virtualMachines/extensions"
         },
         {
-            "apiVersion": "2017-08-01",
-            "name": "updateNetworkLinkedTemplate",
-            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2020-04-01-preview",
+            "type": "Microsoft.Authorization/roleAssignments",
+            "name": "[guid(concat(variables('dnsLabel'), '-', variables('instanceName'), '0-role'))]",
             "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[variables('updateNetworkTemplateUri')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                "virtualNetworkName": {
-                    "value": "[parameters('vnetName')]"
-                },
-                "subnetName": {
-                    "value": "[variables('extSubnetName')]"
-                },
-                "subnetAddressPrefix": {
-                    "value": "[reference(resourceId(parameters('vnetResourceGroupName'), 'Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), variables('extSubnetName')), '2018-03-01').addressPrefix]"
-                },
-                "nsgId": {
-                    "value": "[variables('extNsgID')]"
-                }
-                }
-            }
-            }
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '0'), variables('computeApiVersion'), 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '0')]"
+            ]
+        },
+        {
+            "apiVersion": "2020-04-01-preview",
+            "type": "Microsoft.Authorization/roleAssignments",
+            "name": "[guid(concat(variables('dnsLabel'), '-', variables('instanceName'), '1-role'))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[reference(concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '1'), variables('computeApiVersion'), 'Full').identity.principalId]",
+                "scope": "[resourceGroup().id]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Compute/virtualMachines/', variables('dnsLabel'), '-', variables('instanceName'), '1')]"
+            ]
+        }
     ],
     "outputs": {
         "guiUrlDevice0": {
@@ -1483,7 +1518,7 @@
         },
         "guiUrlDevice1": {
             "type": "string",
-            "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat('https://',reference(concat(variables('mgmtNicId'), '1')).ipConfigurations[0].properties.privateIPAddress, ':', variables('bigIpMgmtPort')), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '0')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
+            "value": "[if(equals(parameters('provisionPublicIP'),'No'), concat('https://',reference(concat(variables('mgmtNicId'), '1')).ipConfigurations[0].properties.privateIPAddress, ':', variables('bigIpMgmtPort')), concat('https://',reference(concat(variables('mgmtPublicIPAddressId'), '1')).dnsSettings.fqdn, ':', variables('bigIpMgmtPort')))]"
         },
         "privateInternalSelfIpAddress0":{
             "type": "string",
@@ -1492,6 +1527,10 @@
         "privateInternalSelfIpAddress1":{
             "type": "string",
             "value": "[reference(concat(variables('intNicName'), '1')).IpConfigurations[0].properties.privateIPAddress]"
+        },
+        "privateInternalSelfIpAddressFloat":{
+            "type": "string",
+            "value": "[reference(concat(variables('intNicName'), '0')).IpConfigurations[2].properties.privateIPAddress]"
         },
         "privateMgmtIpAddress0":{
             "type": "string",
@@ -1520,6 +1559,10 @@
         "publicExternalLoadBalancerAddress":{
             "type": "string",
             "value": "[reference(concat(variables('extPublicIPAddressNamePrefix'), '0')).IpAddress]"
+        },
+        "extNsgID":{
+            "type": "string",
+            "value": "[variables('extNsgID')]"
         }
     }
 }
