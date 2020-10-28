@@ -74,7 +74,7 @@
         "aroResourceProviderObjectId": {
             "type": "string",
             "metadata":{
-                "description": "Service Principal with contributor rights on subscription"
+                "description": "ObjectId of the ARO Resource Provider in your tenant. Get this from step 3 in pre-requisites."
             }
         },
         "myDemoAppURL":{

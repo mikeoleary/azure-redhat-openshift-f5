@@ -28,7 +28,7 @@ PowerShell:
   ``` 
 Azure CLI:  
   ```bash
-  az ad sp list --filter "(appId eq 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875')"
+  az ad sp list --filter "(appId eq 'f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875')" --query "[].objectId"
   ```
 
 ## Instructions
