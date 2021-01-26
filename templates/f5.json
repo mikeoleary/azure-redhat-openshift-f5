@@ -172,7 +172,7 @@
                 "AdvancedWaf200Mbps",
                 "AdvancedWaf1Gbps"
             ],
-            "defaultValue": "Good25Mbps",
+            "defaultValue": "Best25Mbps",
             "metadata": {
                 "description": "F5 SKU (image) you want to deploy. Note: The disk size of the VM will be determined based on the option you select.  **Important**: 10Gbps SKUs are supported only with BIGIP VE v15 or later. If intending to provision multiple modules, ensure the appropriate value is selected, such as **Best** instead of **Good**."
             },
