@@ -1154,7 +1154,7 @@
                             "idleTimeoutInMinutes": 15,
                             "loadDistribution": "Default",
                             "probe": {
-                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/probes/tcp-probe-80')]"
+                                "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/probes/tcp-probe-443')]"
                             },
                             "protocol": "Tcp"
                         }
@@ -1181,15 +1181,6 @@
                     }
                 ],
                 "probes": [
-                    {
-                        "name": "tcp-probe-80",
-                        "properties": {
-                            "intervalInSeconds": 5,
-                            "numberOfProbes": 2,
-                            "port": 80,
-                            "protocol": "Tcp"
-                        }
-                    },
                     {
                         "name": "tcp-probe-443",
                         "properties": {
