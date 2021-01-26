@@ -83,4 +83,4 @@ spec:
     name: f5-demo-httpd
   port:
     targetPort: 8080-tcp
-  wildcardPolicy: Subdomain
+  wildcardPolicy: None

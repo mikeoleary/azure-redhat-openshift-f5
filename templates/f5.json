@@ -1146,7 +1146,7 @@
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/backendAddressPools/loadBalancerBackEnd')]"
                             },
                             "backendPort": 80,
-                            "enableFloatingIP": false,
+                            "enableFloatingIP": true,
                             "frontendIPConfiguration": {
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/frontendIpConfigurations/loadBalancerFrontEnd1')]"
                             },
@@ -1166,7 +1166,7 @@
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/backendAddressPools/loadBalancerBackEnd')]"
                             },
                             "backendPort": 443,
-                            "enableFloatingIP": false,
+                            "enableFloatingIP": true,
                             "frontendIPConfiguration": {
                                 "id": "[concat(resourceId('Microsoft.Network/loadBalancers', variables('externalLoadBalancerName')), '/frontendIpConfigurations/loadBalancerFrontEnd1')]"
                             },
