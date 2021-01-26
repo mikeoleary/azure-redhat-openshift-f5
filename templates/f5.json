@@ -846,6 +846,7 @@
                     {
                         "name": "[concat(variables('instanceName'), '-self-ipconfig')]",
                         "properties": {
+                            "loadBalancerBackendAddressPools": "[if(equals(parameters('provisionPublicIPApp'), 'No'), take(variables('backEndAddressPoolArray'), 0), take(variables('backEndAddressPoolArray'), 1))]",
                             "PublicIpAddress": "[if(equals(parameters('provisionPublicIPApp'),'No'), json('null'), json(concat('{\"Id\": \"', concat(variables('extSelfPublicIpAddressIdPrefix'), '0'), '\"}')))]",
                             "primary": true,
                             "privateIPAddress": "[if(equals(parameters('externalIpSelfAddressRangeStart'), 'DYNAMIC'), json('null'), variables('extSubnetPrivateAddress'))]",
@@ -858,7 +859,6 @@
                     {
                         "name": "[concat(variables('resourceGroupName'), '-ext-ipconfig0')]",
                         "properties": {
-                            "loadBalancerBackendAddressPools": "[if(equals(parameters('provisionPublicIPApp'), 'No'), take(variables('backEndAddressPoolArray'), 0), take(variables('backEndAddressPoolArray'), 1))]",
                             "primary": false,
                             "privateIPAddress": "[if(equals(parameters('externalIpSelfAddressRangeStart'), 'DYNAMIC'), json('null'), concat(variables('extSubnetPrivateAddressPrefix'), variables('extSubnetPrivateAddressSuffix0')))]",
                             "privateIPAllocationMethod": "[if(equals(parameters('externalIpSelfAddressRangeStart'), 'DYNAMIC'), 'Dynamic', 'Static')]",
@@ -897,6 +897,7 @@
                         "properties": {
                             "PublicIpAddress": "[if(equals(parameters('provisionPublicIPApp'),'No'), json('null'), json(concat('{\"Id\": \"', concat(variables('extSelfPublicIpAddressIdPrefix'), '1'), '\"}')))]",
                             "primary": true,
+                            "loadBalancerBackendAddressPools": "[if(equals(parameters('provisionPublicIPApp'), 'No'), take(variables('backEndAddressPoolArray'), 0), take(variables('backEndAddressPoolArray'), 1))]",
                             "privateIPAddress": "[if(equals(parameters('externalIpSelfAddressRangeStart'), 'DYNAMIC'), json('null'), variables('extSubnetPrivateAddress1'))]",
                             "privateIPAllocationMethod": "[if(equals(parameters('externalIpSelfAddressRangeStart'), 'DYNAMIC'), 'Dynamic', 'Static')]",
                             "subnet": {
@@ -907,7 +908,6 @@
                     {
                         "name": "[concat(variables('resourceGroupName'), '-ext-ipconfig1')]",
                         "properties": {
-                            "loadBalancerBackendAddressPools": "[if(equals(parameters('provisionPublicIPApp'), 'No'), take(variables('backEndAddressPoolArray'), 0), take(variables('backEndAddressPoolArray'), 1))]",
                             "primary": false,
                             "privateIPAddress": "[if(equals(parameters('externalIpSelfAddressRangeStart'), 'DYNAMIC'), json('null'), concat(variables('extSubnetPrivateAddressPrefix'), variables('extSubnetPrivateAddressSuffix1')))]",
                             "privateIPAllocationMethod": "[if(equals(parameters('externalIpSelfAddressRangeStart'), 'DYNAMIC'), 'Dynamic', 'Static')]",
