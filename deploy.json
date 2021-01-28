@@ -329,7 +329,7 @@
                                     "value": "[parameters('bigipVmPassword')]"
                                 },
                                 "privateExternalVirtualIpAddress0": {
-                                    "value": "[reference('f5LinkedTemplate').outputs.privateExternalVirtualIpAddress0.value]"
+                                    "value": "[reference('f5LinkedTemplate').outputs.publicExternalLoadBalancerAddress.value]"
                                 },
                                 "privateInternalSelfIpAddressFloat":{
                                     "value": "[reference('f5LinkedTemplate').outputs.privateInternalSelfIpAddressFloat.value]"
